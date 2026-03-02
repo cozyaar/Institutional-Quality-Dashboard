@@ -101,6 +101,23 @@ st.markdown("""
         transform: translateY(-1px) !important;
     }
 
+    /* Style Streamlit Native Elements to match premium-card! */
+    div[data-testid="stFileUploader"] {
+        background: #FFFFFF;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border: 1px solid #F1F5F9;
+    }
+    
+    div[data-testid="stPlotlyChart"] {
+        background: #FFFFFF;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border: 1px solid #F1F5F9;
+        padding: 16px;
+    }
+
     /* Custom metrics */
     div[data-testid="metric-container"] {
         background: #F8FAFC;
@@ -176,8 +193,7 @@ if "analysis_complete" not in st.session_state:
 
 if not st.session_state.analysis_complete:
     st.markdown("<div style='max-width: 600px; margin: 0 auto;'>", unsafe_allow_html=True)
-    st.markdown("<div class='premium-card' style='text-align: center;'>", unsafe_allow_html=True)
-    st.markdown("<h3 style='margin-bottom:20px; color:#0F172A;'>Candidate Evaluation</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='margin-bottom:20px; color:#0F172A; text-align: center;'>Candidate Evaluation</h3>", unsafe_allow_html=True)
     
     uploaded_file = st.file_uploader(
         "Upload Resume or Profile (PDF, PNG, JPG)", 
@@ -268,7 +284,7 @@ if not st.session_state.analysis_complete:
                     st.error(f"Failed to generate intelligence: {str(e)}")
                     st.stop()
                     
-    st.markdown("</div></div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 # --- DASHBOARD RESULTS ---
@@ -278,32 +294,33 @@ if st.session_state.analysis_complete:
     col1, col2 = st.columns([1, 1])
     
     with col1:
-        st.markdown("<div class='premium-card delay-1'>", unsafe_allow_html=True)
-        st.markdown("<h3 style='color:#0F172A; margin-top:0;'>Executive Profile</h3>", unsafe_allow_html=True)
-        st.write(data["executive_summary"])
-        
-        st.markdown("<h4 style='color:#64748B; font-size:1rem; margin-top:20px;'>Evaluated Competencies</h4>", unsafe_allow_html=True)
-        badges_html = "".join([f"<span class='skill-pill'>{skill['name']}</span>" for skill in data["core_skills"] if skill['score'] > 60])
-        st.markdown(badges_html, unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+        html_exec = f"""
+        <div class='premium-card delay-1'>
+            <h3 style='color:#0F172A; margin-top:0;'>Executive Profile</h3>
+            <p style='color:#475569; font-size:1.05rem; line-height:1.6;'>{data['executive_summary']}</p>
+            <h4 style='color:#64748B; font-size:1rem; margin-top:20px;'>Evaluated Competencies</h4>
+            {"".join([f"<span class='skill-pill'>{skill['name']}</span>" for skill in data['core_skills'] if skill['score'] > 60])}
+        </div>
+        """
+        st.markdown(html_exec, unsafe_allow_html=True)
 
-        st.markdown("<div class='premium-card delay-3'>", unsafe_allow_html=True)
-        st.markdown("<h3 style='color:#0F172A; margin-top:0; margin-bottom: 20px;'>Target Career Trajectories</h3>", unsafe_allow_html=True)
+        html_traj = "<div class='premium-card delay-3'>"
+        html_traj += "<h3 style='color:#0F172A; margin-top:0; margin-bottom: 20px;'>Target Career Trajectories</h3>"
         for i, row in enumerate(data["career_trajectories"]):
-            st.markdown(f"""
+            html_traj += f"""
             <div style='background:#F8FAFC; border:1px solid #E2E8F0; padding:16px; border-radius:12px; margin-bottom:12px; border-left:4px solid {"#2563EB" if i==0 else "#CBD5E1"};'>
                 <div style='display:flex; justify-content:space-between; align-items:center;'>
-                    <p class='role-title'>{row['role']}</p>
-                    <p class='role-match'>{row['match_probability']}%</p>
+                    <p class='role-title' style='margin:0; font-weight:700; color:#0F172A; font-size:1.1rem;'>{row['role']}</p>
+                    <p class='role-match' style='margin:0; font-weight:700; color:#2563EB; font-size:1.1rem;'>{row['match_probability']}%</p>
                 </div>
-                <p class='role-desc'>{row['rationale']}</p>
+                <p class='role-desc' style='margin-top:8px; color:#64748B; font-size:0.9rem; line-height:1.5;'>{row['rationale']}</p>
             </div>
-            """, unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+            """
+        html_traj += "</div>"
+        st.markdown(html_traj, unsafe_allow_html=True)
 
     with col2:
-        st.markdown("<div class='premium-card delay-2'>", unsafe_allow_html=True)
-        st.markdown("<h3 style='color:#0F172A; margin-top:0; text-align:center;'>Competency Matrix</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color:#0F172A; margin-top:0; margin-bottom: 20px; text-align:center;'>Competency Matrix</h3>", unsafe_allow_html=True)
         
         # --- PLOTLY RADAR CHART: LIGHT MODE ---
         df_radar = pd.DataFrame(data["competency_radar"])
@@ -321,16 +338,14 @@ if st.session_state.analysis_complete:
                 angularaxis=dict(color="#475569", gridcolor="#F1F5F9", tickfont=dict(size=12))
             ),
             showlegend=False,
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='#FFFFFF',
+            plot_bgcolor='#FFFFFF',
             margin=dict(l=40, r=40, t=20, b=20),
             height=300
         )
         st.plotly_chart(fig_radar, use_container_width=True, config={'displayModeBar': False})
-        st.markdown("</div>", unsafe_allow_html=True)
 
-        st.markdown("<div class='premium-card delay-4'>", unsafe_allow_html=True)
-        st.markdown("<h3 style='color:#0F172A; margin-top:0;'>Skill Index Assessment</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color:#0F172A; margin-top:40px; margin-bottom: 20px;'>Skill Index Assessment</h3>", unsafe_allow_html=True)
         
         df_skills = pd.DataFrame(data["core_skills"])
         fig_bar = px.bar(
@@ -342,17 +357,16 @@ if st.session_state.analysis_complete:
             color_continuous_scale=[[0, '#DBEAFE'], [1, '#2563EB']]
         )
         fig_bar.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='#FFFFFF',
+            plot_bgcolor='#FFFFFF',
             xaxis=dict(range=[0,100], showline=False, showgrid=True, gridcolor='#F1F5F9', title='Proficiency Level', tickfont=dict(color='#64748B')),
             yaxis=dict(title='', tickfont=dict(color='#0F172A', size=13)),
             showlegend=False,
             coloraxis_showscale=False,
             margin=dict(l=0, r=20, t=10, b=30),
-            height=250
+            height=260
         )
         st.plotly_chart(fig_bar, use_container_width=True, config={'displayModeBar': False})
-        st.markdown("</div>", unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True) # Adds a clean invisible gap instead of a white bar
     col_reset1, col_reset2, col_reset3 = st.columns([1, 1, 1])
