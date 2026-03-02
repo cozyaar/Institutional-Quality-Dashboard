@@ -7,369 +7,321 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
 import time
+import os
+import textwrap
 
 st.set_page_config(
-    page_title="Project Path-Finder | Career Intelligence",
-    page_icon="✨",
+    page_title="Pathfinder Intelligence",
+    page_icon="🔮",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# --- MODERN LIGHT THEME CSS ---
+# --- ADVANCED CYBER/GLASS ANIMATED CSS ---
 st.markdown("""
 <style>
-    /* Typography & Core Styling */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    /* Global Animations & Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
     
     html, body, [class*="css"] {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Outfit', sans-serif;
     }
 
+    /* Ambient Shifting Background */
+    .stApp {
+        background: radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 25%),
+                    radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.15), transparent 25%);
+        background-color: #09090B;
+        background-size: 200% 200%;
+        animation: floatBg 15s ease infinite alternate;
+        color: #FAFAFA;
+    }
+    
+    @keyframes floatBg {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Glowing Text FX */
     h1 {
         font-weight: 800 !important;
-        color: #0F172A !important;
-        letter-spacing: -0.02em;
+        background: linear-gradient(to right, #A78BFA, #38BDF8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         text-align: center;
-        margin-bottom: 0px !important;
-        padding-bottom: 0px !important;
+        font-size: 4rem !important;
+        line-height: 1.1;
+        animation: glowText 3s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glowText {
+        from { text-shadow: 0 0 10px rgba(167, 139, 250, 0.1), 0 0 20px rgba(56, 189, 248, 0.1); }
+        to { text-shadow: 0 0 20px rgba(167, 139, 250, 0.3), 0 0 30px rgba(56, 189, 248, 0.2); }
     }
     
     .subtitle {
         text-align: center;
-        color: #64748B;
+        color: #A1A1AA;
         font-size: 1.25rem;
-        font-weight: 400;
-        margin-top: -10px;
-        margin-bottom: 40px;
+        margin-bottom: 3rem;
+        letter-spacing: 0.05em;
     }
 
-    /* Primary Container / Cards */
-    .premium-card {
-        background: #FFFFFF;
-        border-radius: 16px;
-        padding: 24px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-        border: 1px solid #F1F5F9;
-        margin-bottom: 24px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        animation: fadeIn 0.5s ease-out forwards;
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    
-    .premium-card:hover {
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-        transform: translateY(-2px);
-    }
-
-    /* Staggered Animations */
-    @keyframes fadeIn {
-        to { opacity: 1; transform: translateY(0); }
-    }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-    .delay-4 { animation-delay: 0.4s; }
-
-    /* Fancy Pills */
-    .skill-pill {
-        display: inline-block;
-        padding: 6px 16px;
-        margin: 4px;
-        border-radius: 9999px;
-        background: #EFF6FF;
-        color: #1D4ED8;
-        font-size: 0.875rem;
-        font-weight: 600;
-        border: 1px solid #DBEAFE;
-    }
-
-    /* Button Styling */
+    /* Native Interactive Button overriding */
     .stButton > button {
-        background-color: #2563EB !important;
+        background: linear-gradient(135deg, #7C3AED 0%, #0284C7 100%) !important;
         color: white !important;
-        border-radius: 8px !important;
-        padding: 0.75rem 2rem !important;
-        font-weight: 600 !important;
-        border: none !important;
-        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2) !important;
-        transition: all 0.2s ease !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        border-radius: 12px !important;
+        padding: 1rem 2rem !important;
+        font-weight: 800 !important;
+        font-size: 1.1rem !important;
+        letter-spacing: 1px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 0 20px rgba(124, 58, 237, 0.4) !important;
+        text-transform: uppercase;
     }
     .stButton > button:hover {
-        background-color: #1D4ED8 !important;
-        box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3) !important;
-        transform: translateY(-1px) !important;
+        transform: translateY(-3px) scale(1.02) !important;
+        box-shadow: 0 10px 30px rgba(56, 189, 248, 0.6) !important;
+        border-color: rgba(255,255,255,0.3) !important;
     }
 
-    /* Style Streamlit Native Elements to match premium-card! */
+    /* Streamlit Tabs Customization - Cyber Style */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background-color: transparent;
+        padding: 10px 0;
+    }
+    .stTabs [data-baseweb="tab"] {
+        background-color: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px 8px 0 0;
+        padding: 10px 20px;
+        color: #A1A1AA;
+        transition: all 0.3s;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: rgba(124, 58, 237, 0.1) !important;
+        color: #A78BFA !important;
+        border-bottom: 2px solid #A78BFA !important;
+    }
+
+    /* Fix Uploader Box */
     div[data-testid="stFileUploader"] {
-        background: #FFFFFF;
+        background: rgba(24, 24, 27, 0.7);
+        backdrop-filter: blur(10px);
         border-radius: 16px;
-        padding: 24px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        border: 1px solid #F1F5F9;
+        padding: 30px;
+        border: 1px solid rgba(255,255,255,0.05);
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
     }
     
-    div[data-testid="stPlotlyChart"] {
-        background: #FFFFFF;
-        border-radius: 16px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        border: 1px solid #F1F5F9;
-        padding: 16px;
-    }
-
-    /* Custom metrics */
-    div[data-testid="metric-container"] {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 12px;
+    /* Plotly Chart fixes */
+    .js-plotly-plot .plotly .modebar {
+        display: none !important;
     }
     
-    .role-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #0F172A;
-        margin: 0;
-    }
-    
-    .role-match {
-        color: #2563EB;
-        font-weight: 700;
-        font-size: 1.1rem;
-    }
-    
-    .role-desc {
-        color: #64748B;
-        font-size: 0.9rem;
-        margin-top: 8px;
-        line-height: 1.5;
-    }
-    
-    hr {
-        display: none; /* Hide default Streamlit dividers causing unwanted white bars */
-    }
+    /* Clean up default hr */
+    hr { display: none !important; }
 
 </style>
 """, unsafe_allow_html=True)
 
 # --- HEADER SECTION ---
-st.markdown("<h1>Pathfinder<span style='color: #2563EB;'>AI</span></h1>", unsafe_allow_html=True)
-st.markdown("<div class='subtitle'>AI-Powered Career Diagnostics & Industry Benchmarking</div>", unsafe_allow_html=True)
+st.markdown("<h1>QUANTUM PATHFINDER</h1>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>PREDICTIVE NEURAL CAREER DIAGNOSTICS</div>", unsafe_allow_html=True)
 
 # --- SECURE AUTHENTICATION CHECK ---
-import os
-
 try:
-    # 1. Try Streamlit Secrets First (Local config OR Cloud Config)
-    API_KEY = st.secrets.get("GEMINI_API_KEY")
-
+    API_KEY = st.secrets.get("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY")
     if not API_KEY:
-        # 2. Try System Environment Variables (Sometimes needed on certain deployment configs)
-        API_KEY = os.environ.get("GEMINI_API_KEY")
-
-    if not API_KEY:
-        # 3. Halt if nothing exists
-        st.error("""
-        ### 🛑 AUTHENTICATION REQUIRED
-        You must provide a Google Gemini API Key to use this application. The previous key was disabled for security reasons.
-        
-        **How to fix:**
-        1. Open the `.streamlit/secrets.toml` file in this directory.
-        2. Set the key like this:
-        `GEMINI_API_KEY = "your-new-google-gemini-key"`
-        
-        *If deployed to Streamlit Cloud, go to **App Settings > Secrets** and paste the same variable.*
-        """)
+        st.error("### 🛑 SYSTEM OFFLINE: MISSING AUTHENTICATION KEY")
         st.stop()
 except Exception as e:
      st.error(f"Configuration Error: {e}")
      st.stop()
 
-# --- UPLOAD SECTION ---
+# --- STATE INIT ---
 if "analysis_complete" not in st.session_state:
     st.session_state.analysis_complete = False
 
+# --- INPUT VIEW ---
 if not st.session_state.analysis_complete:
-    st.markdown("<div style='max-width: 600px; margin: 0 auto;'>", unsafe_allow_html=True)
-    st.markdown("<h3 style='margin-bottom:20px; color:#0F172A; text-align: center;'>Candidate Evaluation</h3>", unsafe_allow_html=True)
-    
-    uploaded_file = st.file_uploader(
-        "Upload Resume or Profile (PDF, PNG, JPG)", 
-        type=["pdf", "png", "jpg", "jpeg"],
-        label_visibility="collapsed"
-    )
-    
-    if uploaded_file:
-        if st.button("Generate Diagnostic Report", use_container_width=True):
-            resume_text = ""
-            image_parts = []
-            
-            with st.status("Analyzing Candidate Profile...", expanded=True) as status:
-                st.write("Extracting document data...")
-                time.sleep(0.5)
-                try:
-                    if uploaded_file.name.lower().endswith('.pdf'):
-                        pdf_reader = PyPDF2.PdfReader(uploaded_file)
-                        for page in pdf_reader.pages:
-                            t = page.extract_text()
-                            if t: resume_text += t + "\n"
-                    else:
-                        img = Image.open(uploaded_file)
-                        image_parts.append(img)
-                except Exception as e:
-                    status.update(label="Document parsing failed", state="error")
-                    st.error(str(e))
-                    st.stop()
-
-                st.write("Evaluating competencies and career trajectories...")
+    c1, c2, c3 = st.columns([1,2,1])
+    with c2:
+        st.markdown("<h3 style='text-align:center; color:#E4E4E7; font-weight: 300; margin-bottom:15px;'>UPLOAD SUBJECT DATA MATRIX</h3>", unsafe_allow_html=True)
+        uploaded_file = st.file_uploader("Drop PDF or Image", type=["pdf", "png", "jpg", "jpeg"], label_visibility="collapsed")
+        
+        if uploaded_file:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("INITIALIZE NEURAL ANALYSIS", use_container_width=True):
+                resume_text = ""
+                image_parts = []
                 
-                prompt = """
-                You are an expert AI Career Strategist and Industry Analyst for a high-end consulting firm. 
-                Analyze the candidate document. Return ONLY valid JSON matching this exact structure:
-                {
-                    "executive_summary": "Objective, highly professional 2-sentence summary of the candidate's capabilities and industry positioning.",
-                    "core_skills": [
-                        {"name": "Skill 1", "score": 95},
-                        {"name": "Skill 2", "score": 80},
-                        {"name": "Skill 3", "score": 60},
-                        {"name": "Skill 4", "score": 45}
-                    ],
-                    "career_trajectories": [
-                        {
-                            "role": "Top Target Role Name",
-                            "match_probability": 92,
-                            "rationale": "Why this fits their profile."
-                        },
-                        {
-                            "role": "Alternative Role 1",
-                            "match_probability": 78,
-                            "rationale": "Secondary fit rationale."
-                        },
-                        {
-                            "role": "Alternative Role 2",
-                            "match_probability": 65,
-                            "rationale": "Tertiary fit rationale."
-                        }
-                    ],
-                    "competency_radar": [
-                        {"axis": "Technical Expertise", "value": 85},
-                        {"axis": "Leadership", "value": 60},
-                        {"axis": "Communication", "value": 75},
-                        {"axis": "Architecture & Design", "value": 70},
-                        {"axis": "Business Acumen", "value": 50}
-                    ]
-                }
-                """
+                with st.status("Establishing AI uplink...", expanded=True) as status:
+                    st.write("Extracting binary data...")
+                    try:
+                        if uploaded_file.name.lower().endswith('.pdf'):
+                            for page in PyPDF2.PdfReader(uploaded_file).pages:
+                                t = page.extract_text()
+                                if t: resume_text += t + "\n"
+                        else:
+                            image_parts.append(Image.open(uploaded_file))
+                    except Exception as e:
+                        status.update(label="Extraction Failed", state="error")
+                        st.stop()
 
-                try:
-                    genai.configure(api_key=API_KEY)
-                    model = genai.GenerativeModel('gemini-2.5-flash', generation_config={"response_mime_type": "application/json"})
+                    st.write("Synthesizing vectors with Gemini 2.5 Flash Engine...")
                     
-                    if image_parts:
-                        response = model.generate_content([prompt, image_parts[0]])
-                    else:
-                        response = model.generate_content(prompt)
+                    prompt = """
+                    You are a hyper-intelligent AI career analyst. Return ONLY valid JSON:
+                    {
+                        "executive_summary": "Intense, professional 2-sentence breakdown of the candidate's core value.",
+                        "core_skills": [
+                            {"name": "Python", "score": 95}, {"name": "Architecture", "score": 85}, {"name": "Agile", "score": 70}
+                        ],
+                        "career_trajectories": [
+                            {"role": "Primary Vector", "match_probability": 94, "rationale": "Perfect synergy..."},
+                            {"role": "Secondary Vector", "match_probability": 82, "rationale": "High transferability..."}
+                        ],
+                        "competency_radar": [
+                            {"axis": "Technical", "value": 85}, {"axis": "Leadership", "value": 60}, 
+                            {"axis": "Communication", "value": 75}, {"axis": "System Design", "value": 90},
+                            {"axis": "Business Strategy", "value": 50}
+                        ]
+                    }
+                    """
+
+                    try:
+                        genai.configure(api_key=API_KEY)
+                        model = genai.GenerativeModel('gemini-2.5-flash', generation_config={"response_mime_type": "application/json"})
                         
-                    st.write("Finalizing diagnostic report...")
-                    time.sleep(0.5)
-                    st.session_state.data = json.loads(response.text)
-                    st.session_state.analysis_complete = True
-                    status.update(label="Evaluation Complete", state="complete", expanded=False)
-                    st.rerun()
-                    
-                except Exception as e:
-                    status.update(label="AI Engine Error", state="error")
-                    st.error(f"Failed to generate intelligence: {str(e)}")
-                    st.stop()
-                    
-    st.markdown("</div>", unsafe_allow_html=True)
+                        response = model.generate_content([prompt, image_parts[0]]) if image_parts else model.generate_content(prompt)
+                            
+                        st.write("Compiling visual representations...")
+                        time.sleep(0.5)
+                        st.session_state.data = json.loads(response.text)
+                        st.session_state.analysis_complete = True
+                        status.update(label="Analysis Complete", state="complete", expanded=False)
+                        st.rerun()
+                    except Exception as e:
+                        status.update(label="Neural Link Failed", state="error")
+                        st.stop()
 
 
-# --- DASHBOARD RESULTS ---
+# --- INTERACTIVE TABBED DASHBOARD VIEW ---
 if st.session_state.analysis_complete:
     data = st.session_state.data
     
-    col1, col2 = st.columns([1, 1])
+    # 1. INTERACTIVE TABS TO SOLVE SCROLLBAR/CLUTTER ISSUES!
+    tab1, tab2, tab3 = st.tabs(["🚀 STRATEGIC OVERVIEW", "🎯 CAREER VECTORS", "🧬 SKILL MATRIX"])
     
-    with col1:
-        html_exec = f"""
-        <div class='premium-card delay-1'>
-            <h3 style='color:#0F172A; margin-top:0;'>Executive Profile</h3>
-            <p style='color:#475569; font-size:1.05rem; line-height:1.6;'>{data['executive_summary']}</p>
-            <h4 style='color:#64748B; font-size:1rem; margin-top:20px;'>Evaluated Competencies</h4>
-            {"".join([f"<span class='skill-pill'>{skill['name']}</span>" for skill in data['core_skills'] if skill['score'] > 60])}
-        </div>
-        """
-        st.markdown(html_exec, unsafe_allow_html=True)
+    # TAB 1: OVERVIEW
+    with tab1:
+        st.markdown("<br>", unsafe_allow_html=True)
+        colA, colB = st.columns([1.5, 1])
+        with colA:
+            # We use dedent technique by building string cleanly line by line, no spaces!
+            html_chunk = []
+            html_chunk.append("<div style='background:rgba(24,24,27,0.6); padding:30px; border-radius:16px; border:1px solid rgba(255,255,255,0.05); box-shadow:0 10px 30px rgba(0,0,0,0.5);'>")
+            html_chunk.append("<h2 style='color:#FAFAFA; font-weight:800; margin-top:0;'>EXECUTIVE PROFILE</h2>")
+            html_chunk.append(f"<p style='color:#A1A1AA; font-size:1.2rem; line-height:1.7;'>{data['executive_summary']}</p>")
+            html_chunk.append("<br><h4 style='color:#A78BFA; letter-spacing:1px;'>VERIFIED COMPETENCIES</h4>")
+            html_chunk.append("<div>")
+            for skill in data['core_skills']:
+                if skill['score'] > 60:
+                    html_chunk.append(f"<span style='display:inline-block; background:rgba(124,58,237,0.15); color:#D8B4FE; border:1px solid rgba(124,58,237,0.4); padding:8px 16px; border-radius:20px; font-weight:600; margin:5px; box-shadow:0 0 10px rgba(124,58,237,0.2); transition:all 0.3s;'>{skill['name']}</span>")
+            html_chunk.append("</div></div>")
+            
+            st.markdown("".join(html_chunk), unsafe_allow_html=True)
+            
+        with colB:
+            # An animated call out box
+            callout = []
+            callout.append("<div style='background:linear-gradient(135deg, rgba(8,145,178,0.2), rgba(124,58,237,0.2)); padding:30px; border-radius:16px; border:1px solid rgba(167,139,250,0.3);text-align:center;'>")
+            callout.append("<h1 style='font-size:4rem; margin:0; background:linear-gradient(to right, #38BDF8, #A78BFA); -webkit-background-clip:text; color:transparent; animation:none;'>")
+            callout.append(f"{data['career_trajectories'][0]['match_probability']}%")
+            callout.append("</h1>")
+            callout.append("<h3 style='color:#E4E4E7; letter-spacing:2px; margin-top:0;'>PRIMARY ALIGNMENT</h3>")
+            callout.append(f"<p style='color:#38BDF8; font-size:1.2rem; font-weight:600;'>{data['career_trajectories'][0]['role']}</p>")
+            callout.append("</div>")
+            st.markdown("".join(callout), unsafe_allow_html=True)
 
-        html_traj = "<div class='premium-card delay-3'>"
-        html_traj += "<h3 style='color:#0F172A; margin-top:0; margin-bottom: 20px;'>Target Career Trajectories</h3>"
+    # TAB 2: VECTORS
+    with tab2:
+        st.markdown("<br>", unsafe_allow_html=True)
+        html_vectors = []
+        html_vectors.append("<div style='display:grid; gap:20px;'>")
         for i, row in enumerate(data["career_trajectories"]):
-            html_traj += f"""
-            <div style='background:#F8FAFC; border:1px solid #E2E8F0; padding:16px; border-radius:12px; margin-bottom:12px; border-left:4px solid {"#2563EB" if i==0 else "#CBD5E1"};'>
-                <div style='display:flex; justify-content:space-between; align-items:center;'>
-                    <p class='role-title' style='margin:0; font-weight:700; color:#0F172A; font-size:1.1rem;'>{row['role']}</p>
-                    <p class='role-match' style='margin:0; font-weight:700; color:#2563EB; font-size:1.1rem;'>{row['match_probability']}%</p>
-                </div>
-                <p class='role-desc' style='margin-top:8px; color:#64748B; font-size:0.9rem; line-height:1.5;'>{row['rationale']}</p>
-            </div>
-            """
-        html_traj += "</div>"
-        st.markdown(html_traj, unsafe_allow_html=True)
+            b_color = "#A78BFA" if i==0 else "#38BDF8"
+            bg_color = "rgba(124,58,237,0.1)" if i==0 else "rgba(24,24,27,0.6)"
+            border = f"1px solid rgba(167,139,250,0.4)" if i==0 else "1px solid rgba(255,255,255,0.05)"
+            html_vectors.append(f"<div style='background:{bg_color}; border:{border}; border-left:4px solid {b_color}; padding:25px; border-radius:12px; transition:transform 0.2s;' onmouseover='this.style.transform=\"translateX(10px)\"' onmouseout='this.style.transform=\"none\"'>")
+            html_vectors.append(f"<div style='display:flex; justify-content:space-between; align-items:center;'>")
+            html_vectors.append(f"<h2 style='margin:0; color:#FAFAFA;'>{row['role']}</h2>")
+            html_vectors.append(f"<h2 style='margin:0; color:{b_color}; text-shadow:0 0 10px {b_color};'>{row['match_probability']}% MATCH</h2>")
+            html_vectors.append("</div>")
+            html_vectors.append(f"<p style='color:#A1A1AA; font-size:1.1rem; line-height:1.6; margin-top:10px;'>{row['rationale']}</p>")
+            html_vectors.append("</div>")
+        html_vectors.append("</div>")
+        st.markdown("".join(html_vectors), unsafe_allow_html=True)
 
-    with col2:
-        st.markdown("<h3 style='color:#0F172A; margin-top:0; margin-bottom: 20px; text-align:center;'>Competency Matrix</h3>", unsafe_allow_html=True)
+    # TAB 3: MATRIX & RADAR - FITS PERFECTLY IN ITS OWN HUGE WINDOW
+    with tab3:
+        st.markdown("<br>", unsafe_allow_html=True)
+        r_col, l_col = st.columns(2)
         
-        # --- PLOTLY RADAR CHART: LIGHT MODE ---
-        df_radar = pd.DataFrame(data["competency_radar"])
-        fig_radar = go.Figure(data=go.Scatterpolar(
-            r=df_radar['value'],
-            theta=df_radar['axis'],
-            fill='toself',
-            fillcolor='rgba(37, 99, 235, 0.15)',
-            line=dict(color='#2563EB', width=2),
-            marker=dict(color='#1E40AF', size=6)
-        ))
-        fig_radar.update_layout(
-            polar=dict(
-                radialaxis=dict(visible=True, range=[0, 100], color="#94A3B8", gridcolor="#F1F5F9"),
-                angularaxis=dict(color="#475569", gridcolor="#F1F5F9", tickfont=dict(size=12))
-            ),
-            showlegend=False,
-            paper_bgcolor='#FFFFFF',
-            plot_bgcolor='#FFFFFF',
-            margin=dict(l=40, r=40, t=20, b=20),
-            height=300
-        )
-        st.plotly_chart(fig_radar, use_container_width=True, config={'displayModeBar': False})
+        with r_col:
+            st.markdown("<h3 style='color:#FAFAFA; text-align:center;'>NEURAL COMPETENCY RADAR</h3>", unsafe_allow_html=True)
+            df_radar = pd.DataFrame(data["competency_radar"])
+            fig_radar = go.Figure(data=go.Scatterpolar(
+                r=df_radar['value'],
+                theta=df_radar['axis'],
+                fill='toself',
+                fillcolor='rgba(167, 139, 250, 0.3)',
+                line=dict(color='#A78BFA', width=3),
+                marker=dict(color='#FAFAFA', size=8)
+            ))
+            fig_radar.update_layout(
+                polar=dict(
+                    radialaxis=dict(visible=True, range=[0, 100], color="#52525B", gridcolor="rgba(255,255,255,0.05)", showticklabels=False),
+                    angularaxis=dict(color="#E4E4E7", gridcolor="rgba(255,255,255,0.05)", tickfont=dict(size=14, family='Outfit'))
+                ),
+                showlegend=False,
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                margin=dict(l=50, r=50, t=30, b=30),
+                height=450
+            )
+            st.plotly_chart(fig_radar, use_container_width=True)
 
-        st.markdown("<h3 style='color:#0F172A; margin-top:40px; margin-bottom: 20px;'>Skill Index Assessment</h3>", unsafe_allow_html=True)
-        
-        df_skills = pd.DataFrame(data["core_skills"])
-        fig_bar = px.bar(
-            df_skills, 
-            x='score', 
-            y='name', 
-            orientation='h',
-            color='score',
-            color_continuous_scale=[[0, '#DBEAFE'], [1, '#2563EB']]
-        )
-        fig_bar.update_layout(
-            paper_bgcolor='#FFFFFF',
-            plot_bgcolor='#FFFFFF',
-            xaxis=dict(range=[0,100], showline=False, showgrid=True, gridcolor='#F1F5F9', title='Proficiency Level', tickfont=dict(color='#64748B')),
-            yaxis=dict(title='', tickfont=dict(color='#0F172A', size=13)),
-            showlegend=False,
-            coloraxis_showscale=False,
-            margin=dict(l=0, r=20, t=10, b=30),
-            height=260
-        )
-        st.plotly_chart(fig_bar, use_container_width=True, config={'displayModeBar': False})
-        
-    st.markdown("<br>", unsafe_allow_html=True) # Adds a clean invisible gap instead of a white bar
-    col_reset1, col_reset2, col_reset3 = st.columns([1, 1, 1])
-    if col_reset2.button("← Evaluate Another Profile", use_container_width=True):
+        with l_col:
+            st.markdown("<h3 style='color:#FAFAFA; text-align:center;'>INDEX METRICS</h3>", unsafe_allow_html=True)
+            df_skills = pd.DataFrame(data["core_skills"]).sort_values(by='score', ascending=True)
+            fig_bar = px.bar(
+                df_skills, 
+                x='score', 
+                y='name', 
+                orientation='h',
+                color='score',
+                color_continuous_scale=[[0, 'rgba(56, 189, 248, 0.2)'], [1, '#A78BFA']]
+            )
+            fig_bar.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                xaxis=dict(range=[0,100], showline=False, showgrid=True, gridcolor='rgba(255,255,255,0.05)', title='PROFICIENCY %', tickfont=dict(color='#71717A')),
+                yaxis=dict(title='', tickfont=dict(color='#E4E4E7', size=15, family='Outfit')),
+                showlegend=False,
+                coloraxis_showscale=False,
+                margin=dict(l=0, r=20, t=30, b=30),
+                height=450
+            )
+            st.plotly_chart(fig_bar, use_container_width=True)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    c_btn1, c_btn2, c_btn3 = st.columns([1,2,1])
+    if c_btn2.button("⟳ INITIATE NEW SCAN SEQUENCE", use_container_width=True):
         st.session_state.analysis_complete = False
         st.rerun()
