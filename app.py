@@ -141,19 +141,33 @@ st.markdown("<h1>Pathfinder<span style='color: #2563EB;'>AI</span> ✨</h1>", un
 st.markdown("<div class='subtitle'>Predictive Career Intelligence & Industry Benchmarking</div>", unsafe_allow_html=True)
 
 # --- SECURE AUTHENTICATION CHECK ---
+import os
+
 try:
-    API_KEY = st.secrets["GEMINI_API_KEY"]
-except (KeyError, FileNotFoundError):
-    st.error("""
-    ### 🛑 AUTHENTICATION REQUIRED
-    You must provide your own Gemini API Key to use this application. The previous key was disabled for security reasons.
-    
-    **How to fix:**
-    1. Create a `secrets.toml` file inside the `.streamlit` folder (`.streamlit/secrets.toml`).
-    2. Add the following line to the file:
-    `GEMINI_API_KEY = "your-new-google-gemini-key"`
-    """)
-    st.stop()
+    # 1. Try Streamlit Secrets First (Local config OR Cloud Config)
+    API_KEY = st.secrets.get("GEMINI_API_KEY")
+
+    if not API_KEY:
+        # 2. Try System Environment Variables (Sometimes needed on certain deployment configs)
+        API_KEY = os.environ.get("GEMINI_API_KEY")
+
+    if not API_KEY:
+        # 3. Halt if nothing exists
+        st.error("""
+        ### 🛑 AUTHENTICATION REQUIRED
+        You must provide a Google Gemini API Key to use this application. The previous key was disabled for security reasons.
+        
+        **How to fix:**
+        1. Open the `.streamlit/secrets.toml` file in this directory.
+        2. Set the key like this:
+        `GEMINI_API_KEY = "your-new-google-gemini-key"`
+        
+        *If deployed to Streamlit Cloud, go to **App Settings > Secrets** and paste the same variable.*
+        """)
+        st.stop()
+except Exception as e:
+     st.error(f"Configuration Error: {e}")
+     st.stop()
 
 # --- UPLOAD SECTION ---
 if "analysis_complete" not in st.session_state:
