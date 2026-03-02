@@ -127,18 +127,19 @@ st.markdown("""
         color: #64748B;
         font-size: 0.9rem;
         margin-top: 8px;
+        line-height: 1.5;
     }
     
     hr {
-        border-color: #E2E8F0;
+        display: none; /* Hide default Streamlit dividers causing unwanted white bars */
     }
 
 </style>
 """, unsafe_allow_html=True)
 
 # --- HEADER SECTION ---
-st.markdown("<h1>Pathfinder<span style='color: #2563EB;'>AI</span> ✨</h1>", unsafe_allow_html=True)
-st.markdown("<div class='subtitle'>Predictive Career Intelligence & Industry Benchmarking</div>", unsafe_allow_html=True)
+st.markdown("<h1>Pathfinder<span style='color: #2563EB;'>AI</span></h1>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>AI-Powered Career Diagnostics & Industry Benchmarking</div>", unsafe_allow_html=True)
 
 # --- SECURE AUTHENTICATION CHECK ---
 import os
@@ -176,21 +177,21 @@ if "analysis_complete" not in st.session_state:
 if not st.session_state.analysis_complete:
     st.markdown("<div style='max-width: 600px; margin: 0 auto;'>", unsafe_allow_html=True)
     st.markdown("<div class='premium-card' style='text-align: center;'>", unsafe_allow_html=True)
-    st.markdown("<h3 style='margin-bottom:20px; color:#0F172A;'>Upload Profile</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='margin-bottom:20px; color:#0F172A;'>Candidate Evaluation</h3>", unsafe_allow_html=True)
     
     uploaded_file = st.file_uploader(
-        "Candidate Data (PDF, PNG, JPG)", 
+        "Upload Resume or Profile (PDF, PNG, JPG)", 
         type=["pdf", "png", "jpg", "jpeg"],
         label_visibility="collapsed"
     )
     
     if uploaded_file:
-        if st.button("RUN INTELLIGENCE PROTOCOL", use_container_width=True):
+        if st.button("Generate Diagnostic Report", use_container_width=True):
             resume_text = ""
             image_parts = []
             
             with st.status("Analyzing Candidate Profile...", expanded=True) as status:
-                st.write("Extracting data from file...")
+                st.write("Extracting document data...")
                 time.sleep(0.5)
                 try:
                     if uploaded_file.name.lower().endswith('.pdf'):
@@ -202,17 +203,17 @@ if not st.session_state.analysis_complete:
                         img = Image.open(uploaded_file)
                         image_parts.append(img)
                 except Exception as e:
-                    status.update(label="File Extraction Failed", state="error")
+                    status.update(label="Document parsing failed", state="error")
                     st.error(str(e))
                     st.stop()
 
-                st.write("Generating predictive trajectories via Gemini 2.5 Flash...")
+                st.write("Evaluating competencies and career trajectories...")
                 
                 prompt = """
-                You are a highly advanced predictive Career Intelligence Engine designed for a premium SaaS application. 
+                You are an expert AI Career Strategist and Industry Analyst for a high-end consulting firm. 
                 Analyze the candidate document. Return ONLY valid JSON matching this exact structure:
                 {
-                    "executive_summary": "Intelligent, impactful 2-sentence summary of the candidate's potential.",
+                    "executive_summary": "Objective, highly professional 2-sentence summary of the candidate's capabilities and industry positioning.",
                     "core_skills": [
                         {"name": "Skill 1", "score": 95},
                         {"name": "Skill 2", "score": 80},
@@ -255,11 +256,11 @@ if not st.session_state.analysis_complete:
                     else:
                         response = model.generate_content(prompt)
                         
-                    st.write("Rendering intelligence dashboard...")
+                    st.write("Finalizing diagnostic report...")
                     time.sleep(0.5)
                     st.session_state.data = json.loads(response.text)
                     st.session_state.analysis_complete = True
-                    status.update(label="Analysis Complete", state="complete", expanded=False)
+                    status.update(label="Evaluation Complete", state="complete", expanded=False)
                     st.rerun()
                     
                 except Exception as e:
@@ -281,13 +282,13 @@ if st.session_state.analysis_complete:
         st.markdown("<h3 style='color:#0F172A; margin-top:0;'>Executive Profile</h3>", unsafe_allow_html=True)
         st.write(data["executive_summary"])
         
-        st.markdown("<h4 style='color:#64748B; font-size:1rem; margin-top:20px;'>Core Competencies</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='color:#64748B; font-size:1rem; margin-top:20px;'>Evaluated Competencies</h4>", unsafe_allow_html=True)
         badges_html = "".join([f"<span class='skill-pill'>{skill['name']}</span>" for skill in data["core_skills"] if skill['score'] > 60])
         st.markdown(badges_html, unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("<div class='premium-card delay-3'>", unsafe_allow_html=True)
-        st.markdown("<h3 style='color:#0F172A; margin-top:0; margin-bottom: 20px;'>Predictive Outcomes</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color:#0F172A; margin-top:0; margin-bottom: 20px;'>Target Career Trajectories</h3>", unsafe_allow_html=True)
         for i, row in enumerate(data["career_trajectories"]):
             st.markdown(f"""
             <div style='background:#F8FAFC; border:1px solid #E2E8F0; padding:16px; border-radius:12px; margin-bottom:12px; border-left:4px solid {"#2563EB" if i==0 else "#CBD5E1"};'>
@@ -353,8 +354,8 @@ if st.session_state.analysis_complete:
         st.plotly_chart(fig_bar, use_container_width=True, config={'displayModeBar': False})
         st.markdown("</div>", unsafe_allow_html=True)
         
-    st.markdown("<hr>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True) # Adds a clean invisible gap instead of a white bar
     col_reset1, col_reset2, col_reset3 = st.columns([1, 1, 1])
-    if col_reset2.button("← INGEST NEW CANDIDATE PROFILE", use_container_width=True):
+    if col_reset2.button("← Evaluate Another Profile", use_container_width=True):
         st.session_state.analysis_complete = False
         st.rerun()
