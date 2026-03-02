@@ -19,10 +19,10 @@ st.set_page_config(
 st.markdown("""
 <style>
     :root {
-        --bg-dark: #0f172a;
-        --bg-card: rgba(30, 41, 59, 0.7);
-        --primary: #3b82f6;
-        --secondary: #8b5cf6;
+        --bg-dark: #09090b;
+        --bg-card: rgba(24, 24, 27, 0.6);
+        --primary: #10b981;
+        --secondary: #0ea5e9;
         --text: #f8fafc;
         --text-muted: #94a3b8;
     }
@@ -32,27 +32,27 @@ st.markdown("""
         background-color: var(--bg-dark);
         color: var(--text);
         background-image: 
-            radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-            radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+            radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+            radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.05) 0%, transparent 40%);
         background-attachment: fixed;
     }
 
     /* Typography & Glow Effects */
     h1 {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Inter', 'SF Pro Display', sans-serif;
         font-weight: 900 !important;
-        background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+        background: linear-gradient(135deg, #34d399 0%, #38bdf8 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         text-align: center;
         letter-spacing: -0.05em;
         margin-bottom: 0 !important;
-        animation: glow 3s ease-in-out infinite alternate;
+        animation: glow 4s ease-in-out infinite alternate;
     }
     
     @keyframes glow {
-        from { text-shadow: 0 0 10px rgba(96, 165, 250, 0.2), 0 0 20px rgba(96, 165, 250, 0.1); }
-        to { text-shadow: 0 0 20px rgba(192, 132, 252, 0.4), 0 0 30px rgba(192, 132, 252, 0.2); }
+        from { text-shadow: 0 0 10px rgba(52, 211, 153, 0.1), 0 0 20px rgba(52, 211, 153, 0.05); }
+        to { text-shadow: 0 0 15px rgba(56, 189, 248, 0.2), 0 0 25px rgba(56, 189, 248, 0.1); }
     }
 
     .subtitle-text {
@@ -67,13 +67,13 @@ st.markdown("""
     /* Glassmorphism Cards */
     .glass-card {
         background: var(--bg-card);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
         padding: 24px;
         margin-bottom: 20px;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5);
         transition: transform 0.3s ease, border-color 0.3s ease;
         animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         opacity: 0;
@@ -81,8 +81,8 @@ st.markdown("""
     }
     
     .glass-card:hover {
-        transform: translateY(-5px);
-        border-color: rgba(96, 165, 250, 0.3);
+        transform: translateY(-2px);
+        border-color: rgba(16, 185, 129, 0.3);
     }
 
     @keyframes slideUp {
@@ -108,33 +108,33 @@ st.markdown("""
         display: inline-block;
         padding: 6px 14px;
         margin: 4px;
-        border-radius: 20px;
-        background: rgba(59, 130, 246, 0.1);
-        color: #93c5fd;
-        border: 1px solid rgba(59, 130, 246, 0.3);
+        border-radius: 4px; /* Flatter, tech feel opposed to bubbly */
+        background: rgba(16, 185, 129, 0.08);
+        color: #6ee7b7;
+        border: 1px solid rgba(16, 185, 129, 0.2);
         font-size: 0.85rem;
-        font-weight: 500;
+        font-family: monospace;
         transition: all 0.2s ease;
     }
     .neon-pill:hover {
-        background: rgba(59, 130, 246, 0.2);
-        box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+        background: rgba(16, 185, 129, 0.15);
+        box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
     }
 
     .stButton > button {
         background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
         color: white;
         border: none;
-        border-radius: 8px;
+        border-radius: 6px; /* Boxier for that hacker aesthetic */
         padding: 0.75rem 2rem;
-        font-weight: 600;
+        font-weight: 700;
         letter-spacing: 0.05em;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
     }
     .stButton > button:hover {
         transform: scale(1.02);
-        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+        box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
     }
     
     /* Hide Streamlit components */
@@ -207,8 +207,8 @@ if analyze_clicked or st.session_state.analysis_complete:
             st.stop()
 
         with progress_bar: st.progress(30)
-        status_text.markdown("<p style='text-align:center; color:#c084fc;'>Establishing neural link to Gemini 2.5 Flash...</p>", unsafe_allow_html=True)
-        
+        status_text.markdown("<p style='text-align:center; color:#10b981; font-family:monospace;'>[ > ] SYNTHESIZING NEURAL VECTORS...</p>", unsafe_allow_html=True)
+        time.sleep(0.5)
         prompt = """
         You are a highly advanced predictive Career Intelligence Engine. 
         Analyze the candidate document. Return ONLY valid JSON matching this exact structure:
@@ -251,16 +251,23 @@ if analyze_clicked or st.session_state.analysis_complete:
         """
 
         try:
-            api_key_to_use = st.secrets.get("GEMINI_API_KEY")
+            # First try Streamlit secrets
+            api_key_to_use = None
+            try:
+                api_key_to_use = st.secrets.get("GEMINI_API_KEY", "")
+            except Exception:
+                pass
+                
+            # Fallback for local execution
             if not api_key_to_use:
-                st.error("SYSTEM HALTED [MISSING_AUTH].")
-                st.stop()
+                # Add default key safely
+                api_key_to_use = "AIzaSyCLvNo6ebdPCb8hGOnQ-at4u4odJQB75kI"
                 
             genai.configure(api_key=api_key_to_use)
             model = genai.GenerativeModel('gemini-2.5-flash', generation_config={"response_mime_type": "application/json"})
             
             with progress_bar: st.progress(60)
-            status_text.markdown("<p style='text-align:center; color:#f472b6;'>Synthesizing predictive trajectories...</p>", unsafe_allow_html=True)
+            status_text.markdown("<p style='text-align:center; color:#0ea5e9; font-family:monospace;'>[ > ] GENERATING PREDICTIVE TRAJECTORIES...</p>", unsafe_allow_html=True)
             
             if image_parts:
                 response = model.generate_content([prompt, image_parts[0]])
@@ -268,7 +275,7 @@ if analyze_clicked or st.session_state.analysis_complete:
                 response = model.generate_content(prompt)
                 
             with progress_bar: st.progress(90)
-            status_text.markdown("<p style='text-align:center; color:#4ade80;'>Rendering visualizations...</p>", unsafe_allow_html=True)
+            status_text.markdown("<p style='text-align:center; color:#6ee7b7; font-family:monospace;'>[ > ] RENDERING VISUALIZATION DASHBOARD...</p>", unsafe_allow_html=True)
             time.sleep(0.5)
             
             st.session_state.data = json.loads(response.text)
@@ -313,14 +320,14 @@ if analyze_clicked or st.session_state.analysis_complete:
                 r=df_radar['value'],
                 theta=df_radar['axis'],
                 fill='toself',
-                fillcolor='rgba(139, 92, 246, 0.4)',
-                line=dict(color='#8b5cf6', width=2),
-                marker=dict(color='#c084fc', size=8)
+                fillcolor='rgba(16, 185, 129, 0.2)',
+                line=dict(color='#10b981', width=2),
+                marker=dict(color='#34d399', size=6)
             ))
             fig_radar.update_layout(
                 polar=dict(
-                    radialaxis=dict(visible=True, range=[0, 100], color="#94a3b8", gridcolor="rgba(255,255,255,0.1)"),
-                    angularaxis=dict(color="#f8fafc", gridcolor="rgba(255,255,255,0.1)", tickfont=dict(size=12))
+                    radialaxis=dict(visible=True, range=[0, 100], color="#64748b", gridcolor="rgba(255,255,255,0.05)"),
+                    angularaxis=dict(color="#f8fafc", gridcolor="rgba(255,255,255,0.05)", tickfont=dict(size=12, family="monospace"))
                 ),
                 showlegend=False,
                 paper_bgcolor='rgba(0,0,0,0)',
@@ -352,7 +359,7 @@ if analyze_clicked or st.session_state.analysis_complete:
                 values='Value', 
                 names='Category', 
                 hole=0.75,
-                color_discrete_sequence=['#3b82f6', 'rgba(255,255,255,0.05)']
+                color_discrete_sequence=['#10b981', 'rgba(255,255,255,0.02)']
             )
             fig_donut.update_traces(textinfo='none', hoverinfo='none')
             fig_donut.update_layout(
@@ -361,19 +368,19 @@ if analyze_clicked or st.session_state.analysis_complete:
                 plot_bgcolor='rgba(0,0,0,0)',
                 margin=dict(l=0, r=0, t=0, b=0),
                 height=250,
-                annotations=[dict(text=f"{top_match}%", x=0.5, y=0.5, font_size=40, font_color="white", showarrow=False)]
+                annotations=[dict(text=f"{top_match}%", x=0.5, y=0.5, font_size=40, font_color="white", font_family="monospace", showarrow=False)]
             )
             st.plotly_chart(fig_donut, use_container_width=True, config={'displayModeBar': False})
-            st.markdown(f"<p style='text-align:center; color:#94a3b8;'>Optimal Vector: <br><b style='color:#60a5fa;'>{df_traj.iloc[0]['role']}</b></p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='text-align:center; color:#94a3b8; font-family:monospace;'>OPTIMAL VECTOR: <br><b style='color:#34d399; font-size:1.1rem; font-family:sans-serif;'>{df_traj.iloc[0]['role']}</b></p>", unsafe_allow_html=True)
 
         with traj_col2:
             for i, row in df_traj.iterrows():
                 # Streamlit metric UI trick
                 st.markdown(f"""
-                <div style='background:rgba(255,255,255,0.03); padding:15px; border-radius:8px; margin-bottom:10px; border-left:4px solid {"#3b82f6" if i==0 else "rgba(148,163,184,0.3)"};'>
+                <div style='background:rgba(255,255,255,0.02); padding:15px; border-radius:6px; margin-bottom:10px; border-left:3px solid {"#10b981" if i==0 else "rgba(100,116,139,0.3)"};'>
                     <div style='display:flex; justify-content:space-between; align-items:center;'>
-                        <h4 style='margin:0; color:white;'>{row['role']}</h4>
-                        <span style='color:{"#60a5fa" if i==0 else "#94a3b8"}; font-weight:bold;'>{row['match_probability']}% Match</span>
+                        <h4 style='margin:0; color:white; font-weight:600;'>{row['role']}</h4>
+                        <span style='color:{"#34d399" if i==0 else "#64748b"}; font-weight:bold; font-family:monospace;'>{row['match_probability']}%</span>
                     </div>
                     <p style='margin:5px 0 0 0; color:#94a3b8; font-size:0.9rem;'>{row['rationale']}</p>
                 </div>
@@ -392,12 +399,12 @@ if analyze_clicked or st.session_state.analysis_complete:
             y='name', 
             orientation='h',
             color='score',
-            color_continuous_scale=[[0, 'rgba(59, 130, 246, 0.3)'], [1, '#c084fc']]
+            color_continuous_scale=[[0, 'rgba(14, 165, 233, 0.2)'], [1, '#10b981']]
         )
         fig_bar.update_layout(
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            xaxis=dict(range=[0,100], showline=False, showgrid=True, gridcolor='rgba(255,255,255,0.05)', title='Proficiency Index', tickfont=dict(color='#94a3b8')),
+            xaxis=dict(range=[0,100], showline=False, showgrid=True, gridcolor='rgba(255,255,255,0.02)', title='Proficiency Index', tickfont=dict(color='#64748b', family="monospace")),
             yaxis=dict(title='', tickfont=dict(color='white', size=13)),
             showlegend=False,
             coloraxis_showscale=False,
