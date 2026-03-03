@@ -320,7 +320,7 @@ if st.session_state.analysis_complete:
                 'bar': {'color': "#60A5FA"},
                 'bgcolor': "rgba(30, 41, 59, 0.5)",
                 'borderwidth': 0,
-                'bordercolor': "transparent",
+                'bordercolor': "rgba(0,0,0,0)",
                 'steps': [
                     {'range': [0, 50], 'color': 'rgba(239, 68, 68, 0.2)'},
                     {'range': [50, 80], 'color': 'rgba(245, 158, 11, 0.2)'},
