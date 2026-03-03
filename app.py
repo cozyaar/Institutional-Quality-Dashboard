@@ -302,7 +302,7 @@ if st.session_state.analysis_complete:
     {skill_gap_html}
     <br><br>
     <h3 style='margin-bottom: 20px;'>Evaluated Competencies</h3>
-    {" ".join([f"<span style='background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%); border: 1px solid rgba(148, 163, 184, 0.2); padding: 6px 16px; border-radius: 20px; color: #E2E8F0; display: inline-block; margin-bottom: 12px; margin-right: 8px; font-size: 0.95rem; font-family: Outfit; font-weight: 500; box-shadow: 0 2px 10px rgba(0,0,0,0.1);'>{skill['name']} <span style='color: #60A5FA; font-weight: 700;'>{skill['score']}%</span></span>" for skill in data['core_skills'] if skill['score'] > 40])}
+    {" ".join([f"<span style='background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(2, 132, 199, 0.25) 100%); border: 1px solid rgba(148, 163, 184, 0.3); padding: 6px 16px; border-radius: 20px; color: #E2E8F0; display: inline-block; margin-bottom: 12px; margin-right: 8px; font-size: 0.95rem; font-family: Outfit; font-weight: 500; box-shadow: 0 2px 10px rgba(0,0,0,0.1);'>{skill['name']} <span style='color: #38BDF8; font-weight: 700;'>{skill['score']}%</span></span>" for skill in data['core_skills'] if skill['score'] > 40])}
 </div>
 """, unsafe_allow_html=True)
 
@@ -344,7 +344,7 @@ if st.session_state.analysis_complete:
     # Interactive Element: Expanders
     # We will use Streamlit expanders wrapped in our CSS for a glassy look
     for i, row in enumerate(data["career_trajectories"]):
-        with st.expander(f"🚀 {row['role']}   —   {row['match_probability']}% Compatibility", expanded=(i==0)):
+        with st.expander(f"🎯 {row['role']}   —   {row['match_probability']}% Match", expanded=(i==0)):
             m_col1, m_col2 = st.columns([1, 4])
             with m_col1:
                 st.metric(label="Match Probability", value=f"{row['match_probability']}%")
@@ -358,7 +358,6 @@ if st.session_state.analysis_complete:
     col_radar, col_bar = st.columns(2)
     
     with col_radar:
-        st.markdown("<div class='glass-panel'>", unsafe_allow_html=True)
         st.markdown("<h3 style='text-align: center; margin-top:0;'>Competency Matrix</h3>", unsafe_allow_html=True)
         # Infographic 2: Radar Chart
         df_radar = pd.DataFrame(data["competency_radar"])
@@ -366,41 +365,40 @@ if st.session_state.analysis_complete:
             r=df_radar['value'],
             theta=df_radar['axis'],
             fill='toself',
-            fillcolor='rgba(99, 102, 241, 0.25)',
-            line=dict(color='#818CF8', width=3),
-            marker=dict(color='#E0E7FF', size=8)
+            fillcolor='rgba(2, 132, 199, 0.25)',
+            line=dict(color='#0EA5E9', width=3),
+            marker=dict(color='#BAE6FD', size=8)
         ))
         fig_radar.update_layout(
             polar=dict(
+                bgcolor='rgba(0,0,0,0)',
                 radialaxis=dict(visible=True, range=[0, 100], color="#475569", gridcolor="rgba(148, 163, 184, 0.2)", showticklabels=False),
                 angularaxis=dict(color="#CBD5E1", gridcolor="rgba(148, 163, 184, 0.2)", tickfont=dict(size=14, family='Outfit'))
             ),
             showlegend=False,
-            paper_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(30, 41, 59, 0.4)',
             plot_bgcolor='rgba(0,0,0,0)',
             margin=dict(l=50, r=50, t=30, b=30),
             height=380
         )
         st.plotly_chart(fig_radar, use_container_width=True, config={'displayModeBar': False})
-        st.markdown("</div>", unsafe_allow_html=True)
 
     with col_bar:
-        st.markdown("<div class='glass-panel'>", unsafe_allow_html=True)
         st.markdown("<h3 style='text-align: center; margin-top:0;'>Skill Proficiency Index</h3>", unsafe_allow_html=True)
         # Infographic 3: Bar Chart
         df_skills = pd.DataFrame(data["core_skills"]).sort_values(by='score', ascending=True)
         
-        # Neon bar chart
+        # Professional corporate bar chart
         fig_bar = px.bar(
             df_skills, 
             x='score', 
             y='name', 
             orientation='h',
             color='score',
-            color_continuous_scale=[[0, 'rgba(59, 130, 246, 0.3)'], [1, 'rgba(139, 92, 246, 0.9)']]
+            color_continuous_scale=[[0, 'rgba(56, 189, 248, 0.3)'], [1, 'rgba(2, 132, 199, 0.9)']]
         )
         fig_bar.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(30, 41, 59, 0.4)',
             plot_bgcolor='rgba(0,0,0,0)',
             xaxis=dict(range=[0,100], showline=False, showgrid=True, gridcolor='rgba(148, 163, 184, 0.1)', title='Proficiency %', tickfont=dict(color='#64748B')),
             yaxis=dict(title='', tickfont=dict(color='#E2E8F0', size=14, family='Outfit')),
@@ -411,7 +409,6 @@ if st.session_state.analysis_complete:
         )
         fig_bar.update_traces(marker_line_width=0, opacity=0.9)
         st.plotly_chart(fig_bar, use_container_width=True, config={'displayModeBar': False})
-        st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
     c_btn1, c_btn2, c_btn3 = st.columns([1,2,1])
