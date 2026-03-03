@@ -301,9 +301,7 @@ if st.session_state.analysis_complete:
     </div>
     {skill_gap_html}
     <br><br>
-    <h3 style='margin-bottom: 20px;'>Evaluated Competencies</h3>
-    {" ".join([f"<span style='background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(2, 132, 199, 0.25) 100%); border: 1px solid rgba(148, 163, 184, 0.3); padding: 6px 16px; border-radius: 20px; color: #E2E8F0; display: inline-block; margin-bottom: 12px; margin-right: 8px; font-size: 0.95rem; font-family: Outfit; font-weight: 500; box-shadow: 0 2px 10px rgba(0,0,0,0.1);'>{skill['name']} <span style='color: #38BDF8; font-weight: 700;'>{skill['score']}%</span></span>" for skill in data['core_skills'] if skill['score'] > 40])}
-</div>
+    </div>
 """, unsafe_allow_html=True)
 
     with col_gauge:
