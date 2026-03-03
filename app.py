@@ -283,14 +283,14 @@ if st.session_state.analysis_complete:
                 color = "#EF4444" if gap.get("priority") == "High" else ("#F59E0B" if gap.get("priority") == "Medium" else "#10B981")
                 rgba_color = "rgba(239, 68, 68, 0.15)" if gap.get("priority") == "High" else ("rgba(245, 158, 11, 0.15)" if gap.get("priority") == "Medium" else "rgba(16, 185, 129, 0.15)")
                 skill_gap_html += f"""
-                <div style="background: {rgba_color}; border-left: 3px solid {color}; padding: 12px 16px; margin-bottom: 10px; border-radius: 0 8px 8px 0;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <span style="font-weight: 600; font-family: 'Outfit'; color: #F8FAFC; font-size: 1.05rem;">{gap.get('skill', '')}</span>
-                        <span style="font-size: 0.75rem; font-weight: 700; background: {color}; color: white; padding: 2px 8px; border-radius: 12px; font-family: 'Inter';">{gap.get('priority', '')}</span>
-                    </div>
-                    <p style="margin: 0; font-size: 0.9rem; color: #CBD5E1; line-height: 1.4;">{gap.get('rationale', '')}</p>
-                </div>
-                """
+<div style="background: {rgba_color}; border-left: 3px solid {color}; padding: 12px 16px; margin-bottom: 10px; border-radius: 0 8px 8px 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <span style="font-weight: 600; font-family: 'Outfit'; color: #F8FAFC; font-size: 1.05rem;">{gap.get('skill', '')}</span>
+        <span style="font-size: 0.75rem; font-weight: 700; background: {color}; color: white; padding: 2px 8px; border-radius: 12px; font-family: 'Inter';">{gap.get('priority', '')}</span>
+    </div>
+    <p style="margin: 0; font-size: 0.9rem; color: #CBD5E1; line-height: 1.4;">{gap.get('rationale', '')}</p>
+</div>
+"""
         
         st.markdown(f"""
         <div class="glass-panel" style="height: 100%;">
