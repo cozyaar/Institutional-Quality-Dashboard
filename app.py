@@ -188,6 +188,8 @@ if not st.session_state.analysis_complete:
     c1, c2, c3 = st.columns([1,3,1])
     with c2:
         st.markdown("<h3 style='text-align:center; font-weight: 400; margin-bottom:15px; font-size: 1.4rem; color: #CBD5E1;'>Drop any CV • PDF or Image • Any Language</h3>", unsafe_allow_html=True)
+        target_role = st.text_input("", placeholder="Target Role e.g., Senior AI Engineer (Optional)", label_visibility="collapsed")
+        st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
         uploaded_file = st.file_uploader("", type=["pdf", "png", "jpg", "jpeg"], label_visibility="collapsed")
         
         if uploaded_file:
@@ -213,28 +215,35 @@ if not st.session_state.analysis_complete:
 
                     st.write("Engaging multilingual predictive engine (Gemini 2.5 Flash)...")
                     
-                    prompt = """
+                    target_role_context = f"The user is specifically targeting the role of: '{target_role}'. Please include a prioritized skill gap analysis for this specific role." if target_role else "No specific target role provided. Provide a general career analysis without specific skill gaps."
+
+                    prompt = f"""
                     You are an elite, world-class AI Career Strategist and Tech Analyst for a premium firm.
                     Analyze the attached candidate document. The document may be in ANY language (e.g., English, Spanish, German, French, Hindi, Japanese, etc.).
                     You must perfectly understand the candidate's profile, translate contexts internally, and output your comprehensive analysis STRICTLY in English.
 
+                    {target_role_context}
+
                     Return ONLY valid JSON matching this exact structure:
-                    {
+                    {{
                         "executive_summary": "Professional, highly analytical 2-sentence breakdown of the candidate's core value. Use engaging, premium business language.",
                         "global_confidence_score": 88,
                         "primary_language_detected": "English",
                         "core_skills": [
-                            {"name": "Python", "score": 95}, {"name": "Architecture", "score": 85}, {"name": "Agile", "score": 70}
+                            {{"name": "Python", "score": 95}}, {{"name": "Architecture", "score": 85}}, {{"name": "Agile", "score": 70}}
                         ],
                         "career_trajectories": [
-                            {"role": "Primary Vector", "match_probability": 94, "rationale": "High transferability due to..."}
+                            {{"role": "Primary Vector", "match_probability": 94, "rationale": "High transferability due to..."}}
                         ],
                         "competency_radar": [
-                            {"axis": "Technical Expertise", "value": 85}, {"axis": "Leadership", "value": 60}, 
-                            {"axis": "Communication", "value": 75}, {"axis": "System Design", "value": 90},
-                            {"axis": "Business Acumen", "value": 50}
-                        ]
-                    }
+                            {{"axis": "Technical Expertise", "value": 85}}, {{"axis": "Leadership", "value": 60}}, 
+                            {{"axis": "Communication", "value": 75}}, {{"axis": "System Design", "value": 90}},
+                            {{"axis": "Business Acumen", "value": 50}}
+                        ],
+                        "skill_gaps": [
+                            {{"skill": "Missing Skill", "priority": "High", "rationale": "Crucial for target role."}}
+                        ] // Leave empty ([]) if no target role is specified. Priority should be High, Medium, or Low.
+                    }}
                     """
                     
                     contents.insert(0, prompt)
@@ -266,6 +275,23 @@ if st.session_state.analysis_complete:
     col_exec, col_gauge = st.columns([2.2, 1])
     
     with col_exec:
+        # Generate skill gap html if any
+        skill_gap_html = ""
+        if data.get("skill_gaps") and len(data["skill_gaps"]) > 0:
+            skill_gap_html += "<br><br><h3 style='margin-bottom: 15px;'>🎯 Target Skill Gaps</h3>"
+            for gap in data["skill_gaps"]:
+                color = "#EF4444" if gap.get("priority") == "High" else ("#F59E0B" if gap.get("priority") == "Medium" else "#10B981")
+                rgba_color = "rgba(239, 68, 68, 0.15)" if gap.get("priority") == "High" else ("rgba(245, 158, 11, 0.15)" if gap.get("priority") == "Medium" else "rgba(16, 185, 129, 0.15)")
+                skill_gap_html += f"""
+                <div style="background: {rgba_color}; border-left: 3px solid {color}; padding: 12px 16px; margin-bottom: 10px; border-radius: 0 8px 8px 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span style="font-weight: 600; font-family: 'Outfit'; color: #F8FAFC; font-size: 1.05rem;">{gap.get('skill', '')}</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; background: {color}; color: white; padding: 2px 8px; border-radius: 12px; font-family: 'Inter';">{gap.get('priority', '')}</span>
+                    </div>
+                    <p style="margin: 0; font-size: 0.9rem; color: #CBD5E1; line-height: 1.4;">{gap.get('rationale', '')}</p>
+                </div>
+                """
+        
         st.markdown(f"""
         <div class="glass-panel" style="height: 100%;">
             <h3 style='margin-top:0;'>Executive Profile</h3>
@@ -273,6 +299,7 @@ if st.session_state.analysis_complete:
             <div style='margin-top: 15px; display: inline-block; background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.5); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; color: #C4B5FD;'>
                 🌐 Source Language Detected: {data.get('primary_language_detected', 'Unknown')}
             </div>
+            {skill_gap_html}
             <br><br>
             <h3 style='margin-bottom: 20px;'>Evaluated Competencies</h3>
             {" ".join([f"<span style='background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%); border: 1px solid rgba(148, 163, 184, 0.2); padding: 6px 16px; border-radius: 20px; color: #E2E8F0; display: inline-block; margin-bottom: 12px; margin-right: 8px; font-size: 0.95rem; font-family: Outfit; font-weight: 500; box-shadow: 0 2px 10px rgba(0,0,0,0.1);'>{skill['name']} <span style='color: #60A5FA; font-weight: 700;'>{skill['score']}%</span></span>" for skill in data['core_skills'] if skill['score'] > 40])}
