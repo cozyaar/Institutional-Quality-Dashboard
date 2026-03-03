@@ -293,18 +293,18 @@ if st.session_state.analysis_complete:
 """
         
         st.markdown(f"""
-        <div class="glass-panel" style="height: 100%;">
-            <h3 style='margin-top:0;'>Executive Profile</h3>
-            <p style='font-size: 1.1rem; line-height: 1.6; color: #E2E8F0;'>{data['executive_summary']}</p>
-            <div style='margin-top: 15px; display: inline-block; background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.5); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; color: #C4B5FD;'>
-                🌐 Source Language Detected: {data.get('primary_language_detected', 'Unknown')}
-            </div>
-            {skill_gap_html}
-            <br><br>
-            <h3 style='margin-bottom: 20px;'>Evaluated Competencies</h3>
-            {" ".join([f"<span style='background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%); border: 1px solid rgba(148, 163, 184, 0.2); padding: 6px 16px; border-radius: 20px; color: #E2E8F0; display: inline-block; margin-bottom: 12px; margin-right: 8px; font-size: 0.95rem; font-family: Outfit; font-weight: 500; box-shadow: 0 2px 10px rgba(0,0,0,0.1);'>{skill['name']} <span style='color: #60A5FA; font-weight: 700;'>{skill['score']}%</span></span>" for skill in data['core_skills'] if skill['score'] > 40])}
-        </div>
-        """, unsafe_allow_html=True)
+<div class="glass-panel" style="height: 100%;">
+    <h3 style='margin-top:0;'>Executive Profile</h3>
+    <p style='font-size: 1.1rem; line-height: 1.6; color: #E2E8F0;'>{data['executive_summary']}</p>
+    <div style='margin-top: 15px; display: inline-block; background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.5); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; color: #C4B5FD;'>
+        🌐 Source Language Detected: {data.get('primary_language_detected', 'Unknown')}
+    </div>
+    {skill_gap_html}
+    <br><br>
+    <h3 style='margin-bottom: 20px;'>Evaluated Competencies</h3>
+    {" ".join([f"<span style='background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%); border: 1px solid rgba(148, 163, 184, 0.2); padding: 6px 16px; border-radius: 20px; color: #E2E8F0; display: inline-block; margin-bottom: 12px; margin-right: 8px; font-size: 0.95rem; font-family: Outfit; font-weight: 500; box-shadow: 0 2px 10px rgba(0,0,0,0.1);'>{skill['name']} <span style='color: #60A5FA; font-weight: 700;'>{skill['score']}%</span></span>" for skill in data['core_skills'] if skill['score'] > 40])}
+</div>
+""", unsafe_allow_html=True)
 
     with col_gauge:
         st.markdown("<div class='glass-panel' style='height: 100%; display: flex; flex-direction: column; justify-content: center;'>", unsafe_allow_html=True)
