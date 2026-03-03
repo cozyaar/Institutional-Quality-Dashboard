@@ -296,7 +296,7 @@ if st.session_state.analysis_complete:
 <div class="glass-panel" style="height: 100%;">
     <h3 style='margin-top:0;'>Executive Profile</h3>
     <p style='font-size: 1.1rem; line-height: 1.6; color: #E2E8F0;'>{data['executive_summary']}</p>
-    <div style='margin-top: 15px; display: inline-block; background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.5); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; color: #C4B5FD;'>
+    <div style='margin-top: 15px; display: inline-block; background: rgba(2, 132, 199, 0.2); border: 1px solid rgba(2, 132, 199, 0.5); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; color: #38BDF8;'>
         🌐 Source Language Detected: {data.get('primary_language_detected', 'Unknown')}
     </div>
     {skill_gap_html}
@@ -305,7 +305,6 @@ if st.session_state.analysis_complete:
 """, unsafe_allow_html=True)
 
     with col_gauge:
-        st.markdown("<div class='glass-panel' style='height: 100%; display: flex; flex-direction: column; justify-content: center;'>", unsafe_allow_html=True)
         st.markdown("<h3 style='text-align: center; margin-top:0;'>Global Fit Score</h3>", unsafe_allow_html=True)
         # Infographic 1: Gauge Chart for Overall Fit
         fig_gauge = go.Figure(go.Indicator(
@@ -326,14 +325,13 @@ if st.session_state.analysis_complete:
             }
         ))
         fig_gauge.update_layout(
-            paper_bgcolor="rgba(0,0,0,0)", 
+            paper_bgcolor="rgba(30, 41, 59, 0.4)", 
             plot_bgcolor="rgba(0,0,0,0)",
             font={'color': "#F8FAFC", 'family': "Outfit"},
             height=250,
             margin=dict(l=10, r=10, t=10, b=10)
         )
         st.plotly_chart(fig_gauge, use_container_width=True, config={'displayModeBar': False})
-        st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
