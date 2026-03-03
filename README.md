@@ -36,27 +36,11 @@ Project Path-Finder is a complete Python Streamlit web application designed for 
    - Input your **Target Career Goal**.
    - Click to Analyze and view your BIS-Aligned Quality Check!
 
-## ☁️ How to Deploy to Streamlit Cloud
+## ☁️ To visit Streamlit
 
 Streamlit Community Cloud is an easy and free way to deploy your Streamlit apps natively.
 
 **Step-by-Step Deployment:**
 
-1. **Push to GitHub**: 
-   - Ensure all files (`app.py`, `requirements.txt`, `README.md`, and the `.streamlit/config.toml` file) are checked into a GitHub repository (it can be public or private).
-
-2. **Login to Streamlit Community Cloud**:
-   - Go to [share.streamlit.io](https://share.streamlit.io/) and log in using your GitHub account.
-
-3. **Deploy the App**:
-   - Click on **"New app"**.
-   - Select the repository where you pushed your files.
-   - Set the main file path to `app.py`.
-   - Click **"Deploy"**.
-
-4. **Security & Secrets**:
-   - Since the app takes the API key directly via the dashboard sidebar for a better user-auditor experience, you do not *need* to hardcode the API key in the cloud secrets.
-   - This ensures the app is secure and scalable without exposing your personal API credentials. 
-
-## 🛡️ Error Handling
-- The platform includes extremely robust error handling for API quota limits (`429`), invalid or unreadable PDF files securely handled without crashing, and missing configurations safely monitored at runtime.
+1. **Visit streamlit link**: 
+   https://institutional-quality-dashboard.streamlit.app/
