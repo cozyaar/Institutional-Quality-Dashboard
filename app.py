@@ -25,39 +25,38 @@ except ImportError:
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
     page_title="Institutional Quality Dashboard | Career & Competency Benchmarking",
-    page_icon="🏛️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# --- LUXURY INSTITUTIONAL CSS SYSTEM WITH CUSTOM PALETTE & ANIMATIONS ---
-# Palette:
-# Teal:       #31AAA9 / rgb(49, 170, 169)
-# Champagne:  #F8E0A4 / rgb(248, 224, 164)
-# Crimson:    #A82020 / rgb(168, 32, 32)
-# Deep Wine:  #6C1A1A / rgb(108, 26, 26)
+# --- REFINED PROFESSIONAL CSS (HARMONIZED TEAL NOIR PALETTE) ---
+# Primary:    #31AAA9
+# Accent:     #F8E0A4
+# Alert:      #A82020
+# Deep Tone:  #6C1A1A
+# Background: #090E10
+# Card:       #0F171A
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        color: #F5F0E8;
+        color: #E2E8F0;
     }
 
     .stApp {
-        background-color: #0A080C;
+        background-color: #090E10;
         background-image: 
-            radial-gradient(at 0% 0%, rgba(49, 170, 169, 0.08) 0px, transparent 45%),
-            radial-gradient(at 100% 0%, rgba(108, 26, 26, 0.12) 0px, transparent 40%),
-            radial-gradient(at 50% 100%, rgba(248, 224, 164, 0.04) 0px, transparent 50%);
+            radial-gradient(at 0% 0%, rgba(49, 170, 169, 0.04) 0px, transparent 45%),
+            radial-gradient(at 100% 100%, rgba(15, 23, 26, 0.4) 0px, transparent 50%);
     }
 
     /* Keyframe Animations */
     @keyframes fadeInSlide {
         from {
             opacity: 0;
-            transform: translateY(12px);
+            transform: translateY(8px);
         }
         to {
             opacity: 1;
@@ -65,263 +64,232 @@ st.markdown("""
         }
     }
 
-    @keyframes pulseGlow {
-        0% { box-shadow: 0 0 0 0 rgba(49, 170, 169, 0.4); }
-        70% { box-shadow: 0 0 0 8px rgba(49, 170, 169, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(49, 170, 169, 0); }
+    @keyframes livePulse {
+        0% { opacity: 0.6; }
+        50% { opacity: 1; }
+        100% { opacity: 0.6; }
     }
 
-    @keyframes pulseLive {
-        0% { transform: scale(0.92); opacity: 0.7; }
-        50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 4px #31AAA9); }
-        100% { transform: scale(0.92); opacity: 0.7; }
-    }
-
-    /* Refined Luxury Header */
+    /* Professional Executive Header */
     .dashboard-header {
-        border-bottom: 1px solid rgba(248, 224, 164, 0.2);
+        border-bottom: 1px solid rgba(49, 170, 169, 0.18);
         padding-bottom: 1.25rem;
-        margin-bottom: 2rem;
-        animation: fadeInSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+        margin-bottom: 1.75rem;
+        animation: fadeInSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
     
     .dashboard-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 2.35rem;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        background: linear-gradient(135deg, #FFFFFF 20%, #F8E0A4 70%, #31AAA9 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-size: 2.15rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: #F8FAFC;
         margin: 0;
         padding: 0;
     }
     
     .dashboard-subtitle {
-        font-size: 0.95rem;
-        color: #D1C7BD;
-        margin-top: 0.45rem;
+        font-size: 0.925rem;
+        color: #94A3B8;
+        margin-top: 0.35rem;
         font-weight: 400;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.01em;
     }
 
-    /* Cards with Smooth Hover Animations */
+    /* Professional Cards */
     .inst-card {
-        background: linear-gradient(180deg, #140F18 0%, #0E0A12 100%);
-        border: 1px solid rgba(49, 170, 169, 0.22);
-        border-radius: 12px;
+        background: #0F171A;
+        border: 1px solid rgba(49, 170, 169, 0.16);
+        border-radius: 8px;
         padding: 1.35rem 1.5rem;
         margin-bottom: 1rem;
-        box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5);
-        animation: fadeInSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
-                    border-color 0.25s ease, 
-                    box-shadow 0.25s ease;
+        animation: fadeInSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                    border-color 0.2s ease, 
+                    box-shadow 0.2s ease;
     }
 
     .inst-card:hover {
-        transform: translateY(-3px);
-        border-color: rgba(49, 170, 169, 0.45);
-        box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.65), 0 0 16px rgba(49, 170, 169, 0.12);
+        transform: translateY(-2px);
+        border-color: rgba(49, 170, 169, 0.32);
+        box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
     }
 
     .inst-card-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 0.85rem;
+        font-size: 0.825rem;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.06em;
         color: #31AAA9;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.65rem;
     }
 
-    /* Dynamic KPI Metric Containers */
+    /* KPI Metric Containers */
     .kpi-container {
-        background: linear-gradient(180deg, #140F18 0%, #0E0A12 100%);
-        border: 1px solid rgba(248, 224, 164, 0.16);
-        border-radius: 12px;
-        padding: 1.2rem 1.25rem;
-        box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.45);
+        background: #0F171A;
+        border: 1px solid rgba(49, 170, 169, 0.16);
+        border-top: 3px solid #31AAA9;
+        border-radius: 8px;
+        padding: 1.15rem 1.25rem;
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
-                    box-shadow 0.25s ease,
-                    border-color 0.25s ease;
+        animation: fadeInSlide 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                    box-shadow 0.2s ease,
+                    border-color 0.2s ease;
     }
 
     .kpi-container:hover {
-        transform: translateY(-4px);
-        border-color: rgba(248, 224, 164, 0.35);
-        box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.65), 0 0 20px rgba(49, 170, 169, 0.15);
+        transform: translateY(-2px);
+        border-color: rgba(49, 170, 169, 0.38);
+        box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.45);
     }
 
     .kpi-label {
-        font-size: 0.775rem;
-        font-weight: 700;
+        font-size: 0.75rem;
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.07em;
-        color: #D1C7BD;
+        letter-spacing: 0.06em;
+        color: #94A3B8;
         margin-bottom: 0.35rem;
     }
 
     .kpi-value {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 1.95rem;
-        font-weight: 800;
+        font-size: 1.85rem;
+        font-weight: 700;
+        color: #F8FAFC;
         letter-spacing: -0.02em;
         line-height: 1.2;
     }
 
     .kpi-subtext {
         font-size: 0.8rem;
-        font-weight: 600;
-        margin-top: 0.4rem;
+        font-weight: 500;
+        margin-top: 0.35rem;
+        color: #31AAA9;
     }
 
-    /* Distinctive Semantic Badges */
+    /* Badges */
     .badge-teal {
         display: inline-block;
-        background-color: rgba(49, 170, 169, 0.15);
+        background-color: rgba(49, 170, 169, 0.12);
         color: #31AAA9;
         font-size: 0.75rem;
         font-weight: 600;
-        padding: 0.25rem 0.7rem;
-        border-radius: 6px;
-        border: 1px solid rgba(49, 170, 169, 0.38);
+        padding: 0.2rem 0.65rem;
+        border-radius: 4px;
+        border: 1px solid rgba(49, 170, 169, 0.3);
         margin: 0.2rem 0.25rem 0.2rem 0;
     }
 
     .badge-gold {
         display: inline-block;
-        background-color: rgba(248, 224, 164, 0.14);
+        background-color: rgba(248, 224, 164, 0.1);
         color: #F8E0A4;
         font-size: 0.75rem;
         font-weight: 600;
-        padding: 0.25rem 0.7rem;
-        border-radius: 6px;
-        border: 1px solid rgba(248, 224, 164, 0.38);
+        padding: 0.2rem 0.65rem;
+        border-radius: 4px;
+        border: 1px solid rgba(248, 224, 164, 0.25);
         margin: 0.2rem 0.25rem 0.2rem 0;
     }
 
     .badge-crimson {
         display: inline-block;
-        background-color: rgba(168, 32, 32, 0.18);
-        color: #FCA5A5;
+        background-color: rgba(168, 32, 32, 0.14);
+        color: #F87171;
         font-size: 0.75rem;
         font-weight: 600;
-        padding: 0.25rem 0.7rem;
-        border-radius: 6px;
-        border: 1px solid rgba(168, 32, 32, 0.45);
+        padding: 0.2rem 0.65rem;
+        border-radius: 4px;
+        border: 1px solid rgba(168, 32, 32, 0.32);
         margin: 0.2rem 0.25rem 0.2rem 0;
     }
 
-    .badge-wine {
-        display: inline-block;
-        background-color: rgba(108, 26, 26, 0.28);
-        color: #F8E0A4;
-        font-size: 0.75rem;
-        font-weight: 600;
-        padding: 0.25rem 0.7rem;
-        border-radius: 6px;
-        border: 1px solid rgba(168, 32, 32, 0.4);
-        margin: 0.2rem 0.25rem 0.2rem 0;
-    }
-
-    /* Animated Persian Teal Button */
+    /* Buttons */
     .stButton > button {
-        background: linear-gradient(135deg, #31AAA9 0%, #208786 100%) !important;
-        color: #0A080C !important;
-        font-weight: 700 !important;
-        border: 1px solid #45C5C4 !important;
-        border-radius: 8px !important;
-        padding: 0.65rem 1.5rem !important;
-        font-size: 0.95rem !important;
+        background-color: #31AAA9 !important;
+        color: #090E10 !important;
+        font-weight: 600 !important;
+        border: 1px solid #31AAA9 !important;
+        border-radius: 6px !important;
+        padding: 0.55rem 1.35rem !important;
+        font-size: 0.925rem !important;
         letter-spacing: 0.01em !important;
-        box-shadow: 0 4px 14px rgba(49, 170, 169, 0.3) !important;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-shadow: none !important;
+        transition: all 0.2s ease !important;
     }
 
     .stButton > button:hover {
-        background: linear-gradient(135deg, #3DC2C1 0%, #31AAA9 100%) !important;
+        background-color: #258B8A !important;
+        border-color: #258B8A !important;
         color: #FFFFFF !important;
-        transform: translateY(-2px) !important;
-        border-color: #F8E0A4 !important;
-        box-shadow: 0 6px 22px rgba(49, 170, 169, 0.5) !important;
+        transform: translateY(-1px) !important;
     }
 
     .stButton > button:active {
-        transform: scale(0.98) !important;
+        transform: translateY(0) !important;
     }
 
-    /* Minimal File Uploader */
+    /* File Uploader */
     div[data-testid="stFileUploader"] {
-        background: #140F18;
-        border: 1px dashed rgba(49, 170, 169, 0.35);
-        border-radius: 12px;
-        padding: 22px;
-        transition: border-color 0.25s ease, background 0.25s ease;
+        background: #0F171A;
+        border: 1px dashed rgba(49, 170, 169, 0.25);
+        border-radius: 8px;
+        padding: 20px;
+        transition: border-color 0.2s ease;
     }
 
     div[data-testid="stFileUploader"]:hover {
         border-color: #31AAA9;
-        background: #17111C;
     }
 
     /* Expanders */
     div[data-testid="stExpander"] {
-        background: #110D15;
-        border: 1px solid rgba(248, 224, 164, 0.18);
-        border-radius: 10px;
-        margin-bottom: 0.75rem;
-        transition: border-color 0.25s ease;
+        background: #0B1214;
+        border: 1px solid rgba(49, 170, 169, 0.16);
+        border-radius: 6px;
+        margin-bottom: 0.65rem;
     }
 
-    div[data-testid="stExpander"]:hover {
-        border-color: rgba(49, 170, 169, 0.4);
-    }
-
-    /* Animated Tabs */
+    /* Tabs */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 1.75rem;
-        border-bottom: 1px solid rgba(248, 224, 164, 0.2);
+        gap: 1.5rem;
+        border-bottom: 1px solid rgba(49, 170, 169, 0.18);
     }
 
     .stTabs [data-baseweb="tab"] {
-        font-size: 0.95rem;
+        font-size: 0.925rem;
         font-weight: 600;
-        color: #D1C7BD;
+        color: #94A3B8;
         padding: 0.85rem 0.25rem;
-        transition: color 0.2s ease;
-    }
-
-    .stTabs [data-baseweb="tab"]:hover {
-        color: #F8E0A4;
     }
 
     .stTabs [aria-selected="true"] {
         color: #31AAA9 !important;
         border-bottom-color: #31AAA9 !important;
-        border-bottom-width: 2.5px !important;
+        border-bottom-width: 2px !important;
     }
 
-    /* Animated Status Dot */
+    /* Status Indicator */
     .status-dot {
         display: inline-block;
-        width: 8px;
-        height: 8px;
+        width: 7px;
+        height: 7px;
         background-color: #31AAA9;
         border-radius: 50%;
         margin-right: 6px;
-        animation: pulseLive 2s infinite ease-in-out;
+        animation: livePulse 2s infinite ease-in-out;
     }
 
-    /* Sidebar Styling */
+    /* Sidebar */
     section[data-testid="stSidebar"] {
-        background-color: #0A080C;
-        border-right: 1px solid rgba(49, 170, 169, 0.18);
+        background-color: #070B0D;
+        border-right: 1px solid rgba(49, 170, 169, 0.15);
     }
 
     #MainMenu {visibility: hidden;}
@@ -467,7 +435,6 @@ def call_gemini_audit(contents, api_key_to_use, extracted_text="", system_prompt
                 return parsed, model_name
             except Exception as e:
                 err_str = str(e)
-                # If JSON mode is rejected or unsupported, try plain generation
                 if "response_mime_type" in err_str.lower() or "schema" in err_str.lower() or "not supported" in err_str.lower():
                     try:
                         model_plain = genai.GenerativeModel(
@@ -482,38 +449,37 @@ def call_gemini_audit(contents, api_key_to_use, extracted_text="", system_prompt
                 else:
                     errors.append(f"{model_name}: {err_str}")
                 
-                # If model is not found (404), skip secondary payload for this model
                 if "404" in err_str or "not found" in err_str.lower():
                     break
             
     error_summary = "\n• " + "\n• ".join(errors[:4])
     raise RuntimeError(f"All model endpoints failed:{error_summary}")
 
-# --- SIDEBAR: INSTITUTIONAL SYSTEM & IN-MEMORY ARCHIVE ---
+# --- SIDEBAR: SYSTEM CONTROLS & IN-MEMORY ARCHIVE ---
 with st.sidebar:
-    st.markdown("### 🏛️ Quality Auditor")
+    st.markdown("### Quality Auditor")
     st.caption("BIS & NSQF Competency Verification System")
     
     # API Key Handling
     if not api_key:
-        api_key_input = st.text_input("Enter Gemini API Key", type="password", help="Required if not configured in secrets.toml")
+        api_key_input = st.text_input("Gemini API Key", type="password", help="Configured via secrets.toml or environment")
         if api_key_input:
             api_key = api_key_input
         else:
             st.warning("Please provide a Gemini API Key to enable candidate assessment.")
     else:
         st.markdown("""
-        <div style="background: rgba(49, 170, 169, 0.14); border: 1px solid rgba(49, 170, 169, 0.38); border-radius: 8px; padding: 9px 12px; margin-bottom: 12px; font-size: 0.825rem; color: #31AAA9; font-weight: 600;">
-            <span class="status-dot"></span> Gemini API: Authenticated
+        <div style="background: rgba(49, 170, 169, 0.1); border: 1px solid rgba(49, 170, 169, 0.25); border-radius: 6px; padding: 7px 11px; margin-bottom: 12px; font-size: 0.8rem; color: #31AAA9; font-weight: 500;">
+            <span class="status-dot"></span> Gemini Engine: Authenticated
         </div>
         """, unsafe_allow_html=True)
         
     st.markdown("---")
     
     # In-Memory Candidate Archive Section
-    st.markdown("### 💾 Session Memory")
+    st.markdown("### Session Memory")
     num_profiles = len(st.session_state.candidate_memory)
-    st.caption(f"{num_profiles} Candidate Profile(s) Loaded in Memory")
+    st.caption(f"{num_profiles} Candidate Profile(s) Stored in Memory")
     
     if num_profiles > 0:
         options = {}
@@ -541,11 +507,11 @@ with st.sidebar:
 
         col_mem1, col_mem2 = st.columns(2)
         with col_mem1:
-            if st.button("➕ New Ingest", use_container_width=True):
+            if st.button("New Ingestion", use_container_width=True):
                 st.session_state.show_uploader = True
                 st.rerun()
         with col_mem2:
-            if st.button("🗑️ Clear All", use_container_width=True):
+            if st.button("Clear Archive", use_container_width=True):
                 st.session_state.candidate_memory = []
                 st.session_state.active_candidate_id = None
                 st.session_state.show_uploader = True
@@ -554,13 +520,13 @@ with st.sidebar:
         st.info("No candidates stored in memory yet. Upload and analyze a CV to build your audit session.")
 
     st.markdown("---")
-    st.markdown("### ⚙️ Benchmark Standards")
+    st.markdown("### Benchmark Standards")
     st.markdown("""
-    <div style="font-size: 0.825rem; color: #D1C7BD; line-height: 1.65;">
-    • Framework: <b style="color: #31AAA9;">NSQF Level 5 to 8</b><br>
-    • Quality Base: <b style="color: #F8E0A4;">ISO/IEC 17024</b><br>
-    • Verification: <b style="color: #31AAA9;">Deterministic Scoring</b><br>
-    • Deficit Gating: <b style="color: #A82020;">Multi-Level Severity</b>
+    <div style="font-size: 0.8rem; color: #94A3B8; line-height: 1.6;">
+    • Framework: <span style="color: #31AAA9; font-weight: 500;">NSQF Level 5 to 8</span><br>
+    • Quality Base: <span style="color: #E2E8F0; font-weight: 500;">ISO/IEC 17024</span><br>
+    • Verification: <span style="color: #31AAA9; font-weight: 500;">Deterministic Scoring</span><br>
+    • Gating: <span style="color: #F87171; font-weight: 500;">Multi-Tier Audit</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -587,7 +553,7 @@ if st.session_state.show_uploader or not active_record:
         st.markdown("""
         <div class="inst-card">
             <div class="inst-card-title">Profile Ingestion & Standard Evaluation</div>
-            <p style="font-size: 0.95rem; color: #E8DFD5; margin-top: 0; line-height: 1.55;">Upload a candidate curriculum vitae in PDF or high-resolution image format to audit credentials against institutional benchmarks.</p>
+            <p style="font-size: 0.925rem; color: #CBD5E1; margin-top: 0; line-height: 1.5;">Upload a candidate curriculum vitae in PDF or high-resolution image format to audit credentials against institutional benchmarks.</p>
         </div>
         """, unsafe_allow_html=True)
         
@@ -722,14 +688,12 @@ if st.session_state.show_uploader or not active_record:
                             system_prompt=system_prompt
                         )
                         
-                        # Data sanitization
                         global_score = safe_score(parsed_data.get("global_confidence_score", 80))
                         cand_name = parsed_data.get("candidate_name") or uploaded_file.name.rsplit(".", 1)[0]
                         target_disp = target_role if target_role else (
                             parsed_data.get("career_trajectories", [{}])[0].get("role", "General Profile")
                         )
                         
-                        # Generate unique ID for session memory
                         memory_record = {
                             "id": f"cand_{int(time.time())}_{len(st.session_state.candidate_memory)}",
                             "name": cand_name,
@@ -741,7 +705,6 @@ if st.session_state.show_uploader or not active_record:
                             "data": parsed_data
                         }
                         
-                        # Store in memory
                         st.session_state.candidate_memory.insert(0, memory_record)
                         st.session_state.active_candidate_id = memory_record["id"]
                         st.session_state.show_uploader = False
@@ -763,26 +726,26 @@ if active_record and not st.session_state.show_uploader:
     b_col1, b_col2 = st.columns([3, 1])
     with b_col1:
         st.markdown(f"""
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
-            <span style="font-family: 'Plus Jakarta Sans'; font-size: 1.4rem; font-weight: 800; color: #F8E0A4;">{active_record.get('name', 'Candidate')}</span>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+            <span style="font-family: 'Plus Jakarta Sans'; font-size: 1.35rem; font-weight: 700; color: #F8FAFC;">{active_record.get('name', 'Candidate')}</span>
             <span class="badge-teal">{active_record.get('role', 'Institutional Audit')}</span>
             <span class="badge-gold">Score: {active_record.get('score', 80)}%</span>
-            <span style="font-size: 0.8rem; color: #8F8275;">• Verified at {active_record.get('timestamp')}</span>
+            <span style="font-size: 0.8rem; color: #64748B;">• Verified at {active_record.get('timestamp')}</span>
         </div>
         """, unsafe_allow_html=True)
     with b_col2:
-        if st.button("➕ Ingest Another Profile", use_container_width=True):
+        if st.button("Ingest New Profile", use_container_width=True):
             st.session_state.show_uploader = True
             st.rerun()
 
-    # Enhanced Luxury KPI Metric Row
+    # Clean KPI Metric Row
     m1, m2, m3, m4 = st.columns(4)
     with m1:
         fit_val = safe_score(data.get('global_confidence_score', 85))
-        delta_label = "✓ Compliant Standard" if fit_val >= 75 else "⚠ Gap Identified"
+        delta_label = "Compliant Standard" if fit_val >= 75 else "Gap Identified"
         delta_color = "#31AAA9" if fit_val >= 75 else "#F8E0A4"
         st.markdown(f"""
-        <div class="kpi-container" style="border-top: 3.5px solid #31AAA9;">
+        <div class="kpi-container">
             <div class="kpi-label">Institutional Fit Score</div>
             <div class="kpi-value" style="color: #31AAA9;">{fit_val:.0f}%</div>
             <div class="kpi-subtext" style="color: {delta_color};">{delta_label}</div>
@@ -793,33 +756,33 @@ if active_record and not st.session_state.show_uploader:
         top_traj = data.get("career_trajectories", [{}])[0]
         traj_prob = safe_score(top_traj.get('match_probability', 85))
         st.markdown(f"""
-        <div class="kpi-container" style="border-top: 3.5px solid #F8E0A4;">
+        <div class="kpi-container">
             <div class="kpi-label">Primary Role Alignment</div>
-            <div class="kpi-value" style="color: #F8E0A4;">{traj_prob:.0f}%</div>
-            <div class="kpi-subtext" style="color: #D1C7BD;">{top_traj.get('role', 'Standard Specialist')[:20]}</div>
+            <div class="kpi-value">{traj_prob:.0f}%</div>
+            <div class="kpi-subtext" style="color: #94A3B8;">{top_traj.get('role', 'Standard Specialist')[:22]}</div>
         </div>
         """, unsafe_allow_html=True)
         
     with m3:
         core_skills_count = len(data.get("core_skills", []))
         st.markdown(f"""
-        <div class="kpi-container" style="border-top: 3.5px solid #A82020;">
+        <div class="kpi-container">
             <div class="kpi-label">Verified Competencies</div>
-            <div class="kpi-value" style="color: #F8E0A4;">{core_skills_count}</div>
-            <div class="kpi-subtext" style="color: #31AAA9;">NSQF Framework Aligned</div>
+            <div class="kpi-value">{core_skills_count}</div>
+            <div class="kpi-subtext">NSQF Aligned</div>
         </div>
         """, unsafe_allow_html=True)
         
     with m4:
         st.markdown(f"""
-        <div class="kpi-container" style="border-top: 3.5px solid #6C1A1A;">
+        <div class="kpi-container">
             <div class="kpi-label">Document Language</div>
-            <div class="kpi-value" style="color: #F8E0A4; font-size: 1.55rem;">{data.get('primary_language_detected', 'English')}</div>
-            <div class="kpi-subtext" style="color: #31AAA9;">Native AI Translated</div>
+            <div class="kpi-value" style="font-size: 1.55rem;">{data.get('primary_language_detected', 'English')}</div>
+            <div class="kpi-subtext">AI Detected</div>
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
 
     # Top Split: Executive Summary Card & Fit Gauge Chart
     col_exec, col_gauge = st.columns([2.1, 1.1])
@@ -831,7 +794,7 @@ if active_record and not st.session_state.show_uploader:
         """, unsafe_allow_html=True)
         
         st.markdown(f"""
-        <p style="font-size: 1.05rem; line-height: 1.68; color: #F5F0E8; margin-bottom: 1.25rem;">
+        <p style="font-size: 1rem; line-height: 1.65; color: #CBD5E1; margin-bottom: 1.25rem;">
             {data.get('executive_summary', 'Evaluation complete.')}
         </p>
         """, unsafe_allow_html=True)
@@ -840,10 +803,10 @@ if active_record and not st.session_state.show_uploader:
         lang = data.get("primary_language_detected", "English")
         
         st.markdown(f"""
-        <div style="border-top: 1px solid rgba(248, 224, 164, 0.15); padding-top: 0.85rem;">
+        <div style="border-top: 1px solid rgba(49, 170, 169, 0.15); padding-top: 0.85rem;">
             <span class="badge-teal">Tier: {tier}</span>
             <span class="badge-gold">Language: {lang}</span>
-            <span class="badge-wine">Engine: {active_record.get('model', 'Gemini')}</span>
+            <span class="badge-teal">Engine: {active_record.get('model', 'Gemini')}</span>
         </div>
         </div>
         """, unsafe_allow_html=True)
@@ -855,23 +818,23 @@ if active_record and not st.session_state.show_uploader:
             mode="gauge+number",
             value=fit_val,
             domain={'x': [0, 1], 'y': [0, 1]},
-            number={'font': {'color': '#F8E0A4', 'family': 'Plus Jakarta Sans', 'size': 44}, 'suffix': "%"},
+            number={'font': {'color': '#31AAA9', 'family': 'Plus Jakarta Sans', 'size': 44}, 'suffix': "%"},
             gauge={
-                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "#8F8275", 'tickfont': {'color': '#D1C7BD', 'size': 11}},
+                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "#475569", 'tickfont': {'color': '#94A3B8', 'size': 11}},
                 'bar': {'color': "#31AAA9", 'thickness': 0.28},
-                'bgcolor': "#140F18",
+                'bgcolor': "#0B1214",
                 'borderwidth': 0,
                 'steps': [
-                    {'range': [0, 50], 'color': 'rgba(168, 32, 32, 0.28)'},
-                    {'range': [50, 75], 'color': 'rgba(108, 26, 26, 0.38)'},
-                    {'range': [75, 100], 'color': 'rgba(49, 170, 169, 0.25)'}
+                    {'range': [0, 50], 'color': 'rgba(168, 32, 32, 0.18)'},
+                    {'range': [50, 75], 'color': 'rgba(108, 26, 26, 0.25)'},
+                    {'range': [75, 100], 'color': 'rgba(49, 170, 169, 0.18)'}
                 ],
             }
         ))
         fig_gauge.update_layout(
-            paper_bgcolor="#140F18",
-            plot_bgcolor="#140F18",
-            font={'color': "#F8E0A4", 'family': 'Inter'},
+            paper_bgcolor="#0F171A",
+            plot_bgcolor="#0F171A",
+            font={'color': "#F8FAFC", 'family': 'Inter'},
             height=225,
             margin=dict(l=15, r=15, t=20, b=10)
         )
@@ -881,10 +844,10 @@ if active_record and not st.session_state.show_uploader:
 
     # --- TABBED INSTITUTIONAL AUDIT VIEWS ---
     tab1, tab2, tab3, tab4 = st.tabs([
-        "🎯 Trajectories & Skill Gaps",
-        "📊 Competency & Skill Matrix",
-        "🗺️ 4-Week Strategic Roadmap",
-        "📑 Audit Report & Export"
+        "Trajectories & Skill Gaps",
+        "Competency Matrix",
+        "Strategic Roadmap",
+        "Audit Report & Export"
     ])
 
     with tab1:
@@ -897,35 +860,35 @@ if active_record and not st.session_state.show_uploader:
                 st.info("No specific trajectories modeled.")
             for idx, traj in enumerate(trajectories):
                 match_prob = safe_score(traj.get("match_probability", 80))
-                with st.expander(f"📌 {traj.get('role', 'Target Role')} — {match_prob:.0f}% Alignment", expanded=(idx==0)):
+                with st.expander(f"{traj.get('role', 'Target Role')} — {match_prob:.0f}% Alignment", expanded=(idx==0)):
                     st.write(f"**Institutional Alignment:** {traj.get('rationale', '')}")
                     st.progress(match_prob / 100.0)
                     strengths = traj.get("key_strengths", [])
                     if strengths:
                         st.markdown("**Key Verified Strengths:**")
                         for s in strengths:
-                            st.markdown(f"• <span style='color: #31AAA9;'>{s}</span>", unsafe_allow_html=True)
+                            st.markdown(f"• {s}")
 
         with c_gaps:
             st.markdown("<div class='inst-card-title'>Target Standard Skill Gaps</div>", unsafe_allow_html=True)
             skill_gaps = data.get("skill_gaps", [])
             if not skill_gaps:
-                st.success("✓ Candidate fully satisfies all verified baseline requirements for this profile.")
+                st.success("Candidate fully satisfies all verified baseline requirements for this profile.")
             else:
                 for gap in skill_gaps:
                     priority = gap.get("priority", "Medium")
                     badge_class = "badge-crimson" if priority == "High" else ("badge-gold" if priority == "Medium" else "badge-teal")
                     border_color = '#A82020' if priority == 'High' else ('#F8E0A4' if priority == 'Medium' else '#31AAA9')
-                    bg_color = 'rgba(168, 32, 32, 0.12)' if priority == 'High' else ('rgba(248, 224, 164, 0.08)' if priority == 'Medium' else 'rgba(49, 170, 169, 0.08)')
+                    bg_color = 'rgba(168, 32, 32, 0.08)' if priority == 'High' else ('rgba(248, 224, 164, 0.05)' if priority == 'Medium' else 'rgba(49, 170, 169, 0.05)')
                     
                     st.markdown(f"""
-                    <div style="background-color: {bg_color}; border: 1px solid rgba(248, 224, 164, 0.16); border-left: 4px solid {border_color}; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; transition: transform 0.2s ease;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <span style="font-weight: 700; font-size: 1rem; color: #F5F0E8;">{gap.get('skill', 'Identified Gap')}</span>
+                    <div style="background-color: {bg_color}; border: 1px solid rgba(49, 170, 169, 0.15); border-left: 3px solid {border_color}; border-radius: 6px; padding: 13px 15px; margin-bottom: 11px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                            <span style="font-weight: 600; font-size: 0.95rem; color: #F8FAFC;">{gap.get('skill', 'Identified Gap')}</span>
                             <span class="{badge_class}">{priority} Priority</span>
                         </div>
-                        <div style="font-size: 0.85rem; color: #31AAA9; margin-bottom: 6px;"><b>Target Standard:</b> {gap.get('target_standard', 'Industry Benchmark')}</div>
-                        <p style="margin: 0; font-size: 0.885rem; color: #D1C7BD; line-height: 1.45;">{gap.get('rationale', '')}</p>
+                        <div style="font-size: 0.825rem; color: #31AAA9; margin-bottom: 5px;"><b>Target Standard:</b> {gap.get('target_standard', 'Industry Benchmark')}</div>
+                        <p style="margin: 0; font-size: 0.875rem; color: #CBD5E1; line-height: 1.45;">{gap.get('rationale', '')}</p>
                     </div>
                     """, unsafe_allow_html=True)
 
@@ -943,19 +906,19 @@ if active_record and not st.session_state.show_uploader:
                         r=df_radar['value'],
                         theta=df_radar['axis'],
                         fill='toself',
-                        fillcolor='rgba(49, 170, 169, 0.25)',
-                        line=dict(color='#31AAA9', width=2.5),
-                        marker=dict(color='#F8E0A4', size=8)
+                        fillcolor='rgba(49, 170, 169, 0.2)',
+                        line=dict(color='#31AAA9', width=2),
+                        marker=dict(color='#31AAA9', size=6)
                     ))
                     fig_radar.update_layout(
                         polar=dict(
-                            bgcolor='#140F18',
-                            radialaxis=dict(visible=True, range=[0, 100], color="#8F8275", gridcolor="rgba(248, 224, 164, 0.14)", showticklabels=False),
-                            angularaxis=dict(color="#F8E0A4", gridcolor="rgba(248, 224, 164, 0.14)", tickfont=dict(size=11, family='Inter'))
+                            bgcolor='#0F171A',
+                            radialaxis=dict(visible=True, range=[0, 100], color="#64748B", gridcolor="rgba(49, 170, 169, 0.12)", showticklabels=False),
+                            angularaxis=dict(color="#CBD5E1", gridcolor="rgba(49, 170, 169, 0.12)", tickfont=dict(size=11, family='Inter'))
                         ),
                         showlegend=False,
-                        paper_bgcolor='#140F18',
-                        plot_bgcolor='#140F18',
+                        paper_bgcolor='#0F171A',
+                        plot_bgcolor='#0F171A',
                         margin=dict(l=40, r=40, t=30, b=30),
                         height=365
                     )
@@ -972,20 +935,19 @@ if active_record and not st.session_state.show_uploader:
                     df_skills['score'] = df_skills['score'].apply(safe_score)
                     df_skills = df_skills.sort_values(by='score', ascending=True)
                     
-                    # Gradient from Deep Wine to Teal to Champagne
                     fig_bar = px.bar(
                         df_skills,
                         x='score',
                         y='name',
                         orientation='h',
                         color='score',
-                        color_continuous_scale=[[0, '#6C1A1A'], [0.45, '#31AAA9'], [1, '#F8E0A4']]
+                        color_continuous_scale=[[0, '#13282C'], [1, '#31AAA9']]
                     )
                     fig_bar.update_layout(
-                        paper_bgcolor='#140F18',
-                        plot_bgcolor='#140F18',
-                        xaxis=dict(range=[0, 100], showline=False, showgrid=True, gridcolor='rgba(248, 224, 164, 0.12)', title='Proficiency %', tickfont=dict(color='#D1C7BD', size=11)),
-                        yaxis=dict(title='', tickfont=dict(color='#F5F0E8', size=12, family='Inter')),
+                        paper_bgcolor='#0F171A',
+                        plot_bgcolor='#0F171A',
+                        xaxis=dict(range=[0, 100], showline=False, showgrid=True, gridcolor='rgba(49, 170, 169, 0.1)', title='Proficiency %', tickfont=dict(color='#94A3B8', size=11)),
+                        yaxis=dict(title='', tickfont=dict(color='#F1F5F9', size=12, family='Inter')),
                         showlegend=False,
                         coloraxis_showscale=False,
                         margin=dict(l=0, r=15, t=20, b=20),
@@ -1000,38 +962,32 @@ if active_record and not st.session_state.show_uploader:
         st.markdown("<div class='inst-card-title'>4-Week Structured Competency Acquisition Roadmap</div>", unsafe_allow_html=True)
         roadmap = data.get("strategic_roadmap", [])
         if roadmap:
-            phase_colors = ["#31AAA9", "#F8E0A4", "#A82020", "#6C1A1A"]
-            phase_text_colors = ["#31AAA9", "#F8E0A4", "#FCA5A5", "#F8E0A4"]
             col_steps = st.columns(len(roadmap)) if len(roadmap) <= 4 else [st.container()]
             if len(roadmap) <= 4:
                 for idx, step in enumerate(roadmap):
-                    p_color = phase_colors[idx % len(phase_colors)]
-                    p_text = phase_text_colors[idx % len(phase_text_colors)]
                     with col_steps[idx]:
                         st.markdown(f"""
-                        <div class="inst-card" style="height: 100%; border-top: 3.5px solid {p_color};">
-                            <div style="font-size: 0.775rem; font-weight: 700; color: {p_text}; text-transform: uppercase;">{step.get('week_range', f'Phase {idx+1}')}</div>
-                            <div style="font-weight: 700; font-size: 1.05rem; color: #F5F0E8; margin: 5px 0 8px 0;">{step.get('phase_title', 'Initiative')}</div>
-                            <div style="font-size: 0.85rem; color: #D1C7BD; margin-bottom: 8px;"><b>Focus:</b> {step.get('focus', 'Standard')}</div>
-                            <div style="border-top: 1px solid rgba(248, 224, 164, 0.15); padding-top: 8px; margin-top: 8px;">
-                                <span style="font-size: 0.75rem; color: #31AAA9; font-weight: 700;">Target Standard:</span>
-                                <div style="font-size: 0.825rem; color: #E8DFD5; margin-top: 2px;">{step.get('target_standard', 'NSQF Alignment')}</div>
+                        <div class="inst-card" style="height: 100%; border-top: 3px solid #31AAA9;">
+                            <div style="font-size: 0.75rem; font-weight: 700; color: #31AAA9; text-transform: uppercase;">{step.get('week_range', f'Phase {idx+1}')}</div>
+                            <div style="font-weight: 600; font-size: 1rem; color: #F8FAFC; margin: 4px 0 7px 0;">{step.get('phase_title', 'Initiative')}</div>
+                            <div style="font-size: 0.85rem; color: #94A3B8; margin-bottom: 8px;"><b>Focus:</b> {step.get('focus', 'Standard')}</div>
+                            <div style="border-top: 1px solid rgba(49, 170, 169, 0.15); padding-top: 8px; margin-top: 8px;">
+                                <span style="font-size: 0.75rem; color: #F8E0A4; font-weight: 600;">Target Standard:</span>
+                                <div style="font-size: 0.825rem; color: #CBD5E1; margin-top: 2px;">{step.get('target_standard', 'NSQF Alignment')}</div>
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
                         action_items = step.get("action_items", [])
                         if action_items:
                             for item in action_items:
-                                st.markdown(f"<span style='color: {p_color};'>✓</span> <span style='font-size: 0.85rem; color: #D1C7BD;'>{item}</span>", unsafe_allow_html=True)
+                                st.markdown(f"• <span style='font-size: 0.85rem; color: #94A3B8;'>{item}</span>", unsafe_allow_html=True)
             else:
                 for idx, step in enumerate(roadmap):
-                    p_color = phase_colors[idx % len(phase_colors)]
-                    p_text = phase_text_colors[idx % len(phase_text_colors)]
                     st.markdown(f"""
-                    <div class="inst-card" style="border-left: 4px solid {p_color};">
-                        <div style="font-size: 0.775rem; font-weight: 700; color: {p_text}; text-transform: uppercase;">{step.get('week_range', f'Phase {idx+1}')} — {step.get('phase_title', '')}</div>
-                        <p style="font-size: 0.925rem; color: #E8DFD5; margin: 4px 0;"><b>Focus Area:</b> {step.get('focus', '')}</p>
-                        <p style="font-size: 0.85rem; color: #D1C7BD; margin: 0;"><b>Target Standard:</b> <span style="color: #31AAA9;">{step.get('target_standard', '')}</span></p>
+                    <div class="inst-card" style="border-left: 3px solid #31AAA9;">
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #31AAA9; text-transform: uppercase;">{step.get('week_range', f'Phase {idx+1}')} — {step.get('phase_title', '')}</div>
+                        <p style="font-size: 0.925rem; color: #E2E8F0; margin: 4px 0;"><b>Focus Area:</b> {step.get('focus', '')}</p>
+                        <p style="font-size: 0.85rem; color: #94A3B8; margin: 0;"><b>Target Standard:</b> <span style="color: #31AAA9;">{step.get('target_standard', '')}</span></p>
                     </div>
                     """, unsafe_allow_html=True)
         else:
@@ -1098,7 +1054,7 @@ VERIFICATION MODEL: {active_record.get('model', 'Gemini Engine')}
         c_exp1, c_exp2 = st.columns(2)
         with c_exp1:
             st.download_button(
-                label="📥 Download Executive Audit Report (.txt)",
+                label="Download Executive Report (.txt)",
                 data=audit_report_text,
                 file_name=f"Institutional_Audit_{active_record.get('name', 'Candidate').replace(' ', '_')}.txt",
                 mime="text/plain",
@@ -1106,7 +1062,7 @@ VERIFICATION MODEL: {active_record.get('model', 'Gemini Engine')}
             )
         with c_exp2:
             st.download_button(
-                label="📥 Export Full Intelligence Record (.json)",
+                label="Export Intelligence Record (.json)",
                 data=json.dumps(data, indent=2),
                 file_name=f"Intelligence_Record_{active_record.get('name', 'Candidate').replace(' ', '_')}.json",
                 mime="application/json",
