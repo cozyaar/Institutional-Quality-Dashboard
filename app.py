@@ -30,36 +30,67 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- MODERN SOPHISTICATED INSTITUTIONAL CSS SYSTEM ---
+# --- LUXURY INSTITUTIONAL CSS SYSTEM WITH CUSTOM PALETTE & ANIMATIONS ---
+# Palette:
+# Teal:       #31AAA9 / rgb(49, 170, 169)
+# Champagne:  #F8E0A4 / rgb(248, 224, 164)
+# Crimson:    #A82020 / rgb(168, 32, 32)
+# Deep Wine:  #6C1A1A / rgb(108, 26, 26)
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        color: #F1F5F9;
+        color: #F5F0E8;
     }
 
     .stApp {
-        background-color: #080C15;
+        background-color: #0A080C;
         background-image: 
-            radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.05) 0px, transparent 50%),
-            radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.04) 0px, transparent 50%);
+            radial-gradient(at 0% 0%, rgba(49, 170, 169, 0.08) 0px, transparent 45%),
+            radial-gradient(at 100% 0%, rgba(108, 26, 26, 0.12) 0px, transparent 40%),
+            radial-gradient(at 50% 100%, rgba(248, 224, 164, 0.04) 0px, transparent 50%);
     }
 
-    /* Refined Executive Header */
+    /* Keyframe Animations */
+    @keyframes fadeInSlide {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes pulseGlow {
+        0% { box-shadow: 0 0 0 0 rgba(49, 170, 169, 0.4); }
+        70% { box-shadow: 0 0 0 8px rgba(49, 170, 169, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(49, 170, 169, 0); }
+    }
+
+    @keyframes pulseLive {
+        0% { transform: scale(0.92); opacity: 0.7; }
+        50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 4px #31AAA9); }
+        100% { transform: scale(0.92); opacity: 0.7; }
+    }
+
+    /* Refined Luxury Header */
     .dashboard-header {
-        border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+        border-bottom: 1px solid rgba(248, 224, 164, 0.2);
         padding-bottom: 1.25rem;
         margin-bottom: 2rem;
+        animation: fadeInSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
     
     .dashboard-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 2.25rem;
+        font-size: 2.35rem;
         font-weight: 800;
         letter-spacing: -0.03em;
-        background: linear-gradient(135deg, #FFFFFF 30%, #BAE6FD 100%);
+        background: linear-gradient(135deg, #FFFFFF 20%, #F8E0A4 70%, #31AAA9 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -68,20 +99,30 @@ st.markdown("""
     
     .dashboard-subtitle {
         font-size: 0.95rem;
-        color: #94A3B8;
-        margin-top: 0.4rem;
+        color: #D1C7BD;
+        margin-top: 0.45rem;
         font-weight: 400;
-        letter-spacing: 0.01em;
+        letter-spacing: 0.02em;
     }
 
-    /* Rich Elevated Cards */
+    /* Cards with Smooth Hover Animations */
     .inst-card {
-        background: linear-gradient(180deg, #0E1626 0%, #0A101D 100%);
-        border: 1px solid rgba(56, 189, 248, 0.14);
-        border-radius: 10px;
+        background: linear-gradient(180deg, #140F18 0%, #0E0A12 100%);
+        border: 1px solid rgba(49, 170, 169, 0.22);
+        border-radius: 12px;
         padding: 1.35rem 1.5rem;
         margin-bottom: 1rem;
-        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45);
+        box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5);
+        animation: fadeInSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                    border-color 0.25s ease, 
+                    box-shadow 0.25s ease;
+    }
+
+    .inst-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(49, 170, 169, 0.45);
+        box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.65), 0 0 16px rgba(49, 170, 169, 0.12);
     }
 
     .inst-card-title {
@@ -89,38 +130,47 @@ st.markdown("""
         font-size: 0.85rem;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.07em;
-        color: #38BDF8;
+        letter-spacing: 0.08em;
+        color: #31AAA9;
         margin-bottom: 0.75rem;
     }
 
-    /* KPI Metric Cards */
+    /* Dynamic KPI Metric Containers */
     .kpi-container {
-        background: linear-gradient(180deg, #0E1626 0%, #0A101D 100%);
-        border: 1px solid rgba(148, 163, 184, 0.14);
-        border-radius: 10px;
-        padding: 1.15rem 1.25rem;
-        box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(180deg, #140F18 0%, #0E0A12 100%);
+        border: 1px solid rgba(248, 224, 164, 0.16);
+        border-radius: 12px;
+        padding: 1.2rem 1.25rem;
+        box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.45);
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                    box-shadow 0.25s ease,
+                    border-color 0.25s ease;
+    }
+
+    .kpi-container:hover {
+        transform: translateY(-4px);
+        border-color: rgba(248, 224, 164, 0.35);
+        box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.65), 0 0 20px rgba(49, 170, 169, 0.15);
     }
 
     .kpi-label {
         font-size: 0.775rem;
-        font-weight: 600;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: #94A3B8;
+        letter-spacing: 0.07em;
+        color: #D1C7BD;
         margin-bottom: 0.35rem;
     }
 
     .kpi-value {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 1.85rem;
+        font-size: 1.95rem;
         font-weight: 800;
-        color: #F8FAFC;
         letter-spacing: -0.02em;
         line-height: 1.2;
     }
@@ -128,139 +178,150 @@ st.markdown("""
     .kpi-subtext {
         font-size: 0.8rem;
         font-weight: 600;
-        margin-top: 0.35rem;
+        margin-top: 0.4rem;
     }
 
-    /* Refined Semantic Badges */
-    .badge-primary {
+    /* Distinctive Semantic Badges */
+    .badge-teal {
         display: inline-block;
-        background-color: rgba(37, 99, 235, 0.15);
-        color: #60A5FA;
+        background-color: rgba(49, 170, 169, 0.15);
+        color: #31AAA9;
         font-size: 0.75rem;
         font-weight: 600;
-        padding: 0.25rem 0.65rem;
-        border-radius: 5px;
-        border: 1px solid rgba(96, 165, 250, 0.3);
+        padding: 0.25rem 0.7rem;
+        border-radius: 6px;
+        border: 1px solid rgba(49, 170, 169, 0.38);
         margin: 0.2rem 0.25rem 0.2rem 0;
     }
 
-    .badge-emerald {
+    .badge-gold {
         display: inline-block;
-        background-color: rgba(16, 185, 129, 0.14);
-        color: #34D399;
+        background-color: rgba(248, 224, 164, 0.14);
+        color: #F8E0A4;
         font-size: 0.75rem;
         font-weight: 600;
-        padding: 0.25rem 0.65rem;
-        border-radius: 5px;
-        border: 1px solid rgba(52, 211, 153, 0.35);
+        padding: 0.25rem 0.7rem;
+        border-radius: 6px;
+        border: 1px solid rgba(248, 224, 164, 0.38);
         margin: 0.2rem 0.25rem 0.2rem 0;
     }
 
-    .badge-amber {
+    .badge-crimson {
         display: inline-block;
-        background-color: rgba(245, 158, 11, 0.14);
-        color: #FBBF24;
+        background-color: rgba(168, 32, 32, 0.18);
+        color: #FCA5A5;
         font-size: 0.75rem;
         font-weight: 600;
-        padding: 0.25rem 0.65rem;
-        border-radius: 5px;
-        border: 1px solid rgba(251, 191, 36, 0.35);
+        padding: 0.25rem 0.7rem;
+        border-radius: 6px;
+        border: 1px solid rgba(168, 32, 32, 0.45);
         margin: 0.2rem 0.25rem 0.2rem 0;
     }
 
-    .badge-rose {
+    .badge-wine {
         display: inline-block;
-        background-color: rgba(244, 63, 94, 0.14);
-        color: #FB7185;
+        background-color: rgba(108, 26, 26, 0.28);
+        color: #F8E0A4;
         font-size: 0.75rem;
         font-weight: 600;
-        padding: 0.25rem 0.65rem;
-        border-radius: 5px;
-        border: 1px solid rgba(251, 113, 133, 0.35);
+        padding: 0.25rem 0.7rem;
+        border-radius: 6px;
+        border: 1px solid rgba(168, 32, 32, 0.4);
         margin: 0.2rem 0.25rem 0.2rem 0;
     }
 
-    .badge-cyan {
-        display: inline-block;
-        background-color: rgba(6, 182, 212, 0.14);
-        color: #22D3EE;
-        font-size: 0.75rem;
-        font-weight: 600;
-        padding: 0.25rem 0.65rem;
-        border-radius: 5px;
-        border: 1px solid rgba(34, 211, 238, 0.35);
-        margin: 0.2rem 0.25rem 0.2rem 0;
-    }
-
-    /* Premium Button Styling */
+    /* Animated Persian Teal Button */
     .stButton > button {
-        background: linear-gradient(180deg, #0284C7 0%, #0369A1 100%) !important;
-        color: #FFFFFF !important;
-        border: 1px solid #38BDF8 !important;
+        background: linear-gradient(135deg, #31AAA9 0%, #208786 100%) !important;
+        color: #0A080C !important;
+        font-weight: 700 !important;
+        border: 1px solid #45C5C4 !important;
         border-radius: 8px !important;
-        padding: 0.65rem 1.4rem !important;
-        font-size: 0.925rem !important;
-        font-weight: 600 !important;
+        padding: 0.65rem 1.5rem !important;
+        font-size: 0.95rem !important;
         letter-spacing: 0.01em !important;
-        box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35) !important;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 4px 14px rgba(49, 170, 169, 0.3) !important;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
     .stButton > button:hover {
-        background: linear-gradient(180deg, #0EA5E9 0%, #0284C7 100%) !important;
-        border-color: #7DD3FC !important;
-        box-shadow: 0 4px 16px rgba(14, 165, 233, 0.5) !important;
-        transform: translateY(-1px) !important;
+        background: linear-gradient(135deg, #3DC2C1 0%, #31AAA9 100%) !important;
+        color: #FFFFFF !important;
+        transform: translateY(-2px) !important;
+        border-color: #F8E0A4 !important;
+        box-shadow: 0 6px 22px rgba(49, 170, 169, 0.5) !important;
     }
 
     .stButton > button:active {
-        transform: translateY(0) !important;
+        transform: scale(0.98) !important;
     }
 
     /* Minimal File Uploader */
     div[data-testid="stFileUploader"] {
-        background: #0E1626;
-        border: 1px dashed rgba(56, 189, 248, 0.35);
-        border-radius: 10px;
+        background: #140F18;
+        border: 1px dashed rgba(49, 170, 169, 0.35);
+        border-radius: 12px;
         padding: 22px;
-        transition: border-color 0.2s ease;
+        transition: border-color 0.25s ease, background 0.25s ease;
     }
 
     div[data-testid="stFileUploader"]:hover {
-        border-color: #38BDF8;
+        border-color: #31AAA9;
+        background: #17111C;
     }
 
     /* Expanders */
     div[data-testid="stExpander"] {
-        background: #0A111E;
-        border: 1px solid rgba(148, 163, 184, 0.16);
-        border-radius: 8px;
-        margin-bottom: 0.65rem;
+        background: #110D15;
+        border: 1px solid rgba(248, 224, 164, 0.18);
+        border-radius: 10px;
+        margin-bottom: 0.75rem;
+        transition: border-color 0.25s ease;
     }
 
-    /* Tabs */
+    div[data-testid="stExpander"]:hover {
+        border-color: rgba(49, 170, 169, 0.4);
+    }
+
+    /* Animated Tabs */
     .stTabs [data-baseweb="tab-list"] {
         gap: 1.75rem;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+        border-bottom: 1px solid rgba(248, 224, 164, 0.2);
     }
 
     .stTabs [data-baseweb="tab"] {
-        font-size: 0.925rem;
+        font-size: 0.95rem;
         font-weight: 600;
-        color: #94A3B8;
+        color: #D1C7BD;
         padding: 0.85rem 0.25rem;
+        transition: color 0.2s ease;
+    }
+
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #F8E0A4;
     }
 
     .stTabs [aria-selected="true"] {
-        color: #38BDF8 !important;
-        border-bottom-color: #0284C7 !important;
-        border-bottom-width: 2px !important;
+        color: #31AAA9 !important;
+        border-bottom-color: #31AAA9 !important;
+        border-bottom-width: 2.5px !important;
+    }
+
+    /* Animated Status Dot */
+    .status-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background-color: #31AAA9;
+        border-radius: 50%;
+        margin-right: 6px;
+        animation: pulseLive 2s infinite ease-in-out;
     }
 
     /* Sidebar Styling */
     section[data-testid="stSidebar"] {
-        background-color: #070B13;
-        border-right: 1px solid rgba(56, 189, 248, 0.12);
+        background-color: #0A080C;
+        border-right: 1px solid rgba(49, 170, 169, 0.18);
     }
 
     #MainMenu {visibility: hidden;}
@@ -314,7 +375,6 @@ def clean_json_response(raw_text):
     try:
         return json.loads(text)
     except json.JSONDecodeError:
-        # Search for outermost JSON object
         match = re.search(r"\{.*\}", text, re.DOTALL)
         if match:
             return json.loads(match.group(0))
@@ -443,8 +503,8 @@ with st.sidebar:
             st.warning("Please provide a Gemini API Key to enable candidate assessment.")
     else:
         st.markdown("""
-        <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 6px; padding: 8px 12px; margin-bottom: 12px; font-size: 0.825rem; color: #34D399; font-weight: 500;">
-            ● Gemini API: Authenticated
+        <div style="background: rgba(49, 170, 169, 0.14); border: 1px solid rgba(49, 170, 169, 0.38); border-radius: 8px; padding: 9px 12px; margin-bottom: 12px; font-size: 0.825rem; color: #31AAA9; font-weight: 600;">
+            <span class="status-dot"></span> Gemini API: Authenticated
         </div>
         """, unsafe_allow_html=True)
         
@@ -496,11 +556,11 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("### ⚙️ Benchmark Standards")
     st.markdown("""
-    <div style="font-size: 0.8rem; color: #94A3B8; line-height: 1.6;">
-    • Framework: <b style="color: #38BDF8;">NSQF Level 5 to 8</b><br>
-    • Quality Base: <b style="color: #34D399;">ISO/IEC 17024</b><br>
-    • Verification: <b style="color: #FBBF24;">Deterministic Scoring</b><br>
-    • Multi-Language: <b style="color: #818CF8;">Native Auto-Detect</b>
+    <div style="font-size: 0.825rem; color: #D1C7BD; line-height: 1.65;">
+    • Framework: <b style="color: #31AAA9;">NSQF Level 5 to 8</b><br>
+    • Quality Base: <b style="color: #F8E0A4;">ISO/IEC 17024</b><br>
+    • Verification: <b style="color: #31AAA9;">Deterministic Scoring</b><br>
+    • Deficit Gating: <b style="color: #A82020;">Multi-Level Severity</b>
     </div>
     """, unsafe_allow_html=True)
 
@@ -527,7 +587,7 @@ if st.session_state.show_uploader or not active_record:
         st.markdown("""
         <div class="inst-card">
             <div class="inst-card-title">Profile Ingestion & Standard Evaluation</div>
-            <p style="font-size: 0.925rem; color: #CBD5E1; margin-top: 0; line-height: 1.5;">Upload a candidate curriculum vitae in PDF or high-resolution image format to audit credentials against institutional benchmarks.</p>
+            <p style="font-size: 0.95rem; color: #E8DFD5; margin-top: 0; line-height: 1.55;">Upload a candidate curriculum vitae in PDF or high-resolution image format to audit credentials against institutional benchmarks.</p>
         </div>
         """, unsafe_allow_html=True)
         
@@ -559,7 +619,6 @@ if st.session_state.show_uploader or not active_record:
                     try:
                         if uploaded_file.name.lower().endswith(".pdf"):
                             extracted_text = extract_pdf_text(file_bytes)
-                            # Format primary payload
                             if extracted_text and len(extracted_text.strip()) > 40:
                                 contents = [
                                     {"mime_type": "application/pdf", "data": file_bytes},
@@ -705,10 +764,10 @@ if active_record and not st.session_state.show_uploader:
     with b_col1:
         st.markdown(f"""
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
-            <span style="font-family: 'Plus Jakarta Sans'; font-size: 1.35rem; font-weight: 700; color: #F8FAFC;">{active_record.get('name', 'Candidate')}</span>
-            <span class="badge-primary">{active_record.get('role', 'Institutional Audit')}</span>
-            <span class="badge-emerald">Score: {active_record.get('score', 80)}%</span>
-            <span style="font-size: 0.8rem; color: #64748B;">• Verified at {active_record.get('timestamp')}</span>
+            <span style="font-family: 'Plus Jakarta Sans'; font-size: 1.4rem; font-weight: 800; color: #F8E0A4;">{active_record.get('name', 'Candidate')}</span>
+            <span class="badge-teal">{active_record.get('role', 'Institutional Audit')}</span>
+            <span class="badge-gold">Score: {active_record.get('score', 80)}%</span>
+            <span style="font-size: 0.8rem; color: #8F8275;">• Verified at {active_record.get('timestamp')}</span>
         </div>
         """, unsafe_allow_html=True)
     with b_col2:
@@ -716,16 +775,16 @@ if active_record and not st.session_state.show_uploader:
             st.session_state.show_uploader = True
             st.rerun()
 
-    # Enhanced Top KPI Metric Row with Vibrant Palette
+    # Enhanced Luxury KPI Metric Row
     m1, m2, m3, m4 = st.columns(4)
     with m1:
         fit_val = safe_score(data.get('global_confidence_score', 85))
         delta_label = "✓ Compliant Standard" if fit_val >= 75 else "⚠ Gap Identified"
-        delta_color = "#34D399" if fit_val >= 75 else "#FBBF24"
+        delta_color = "#31AAA9" if fit_val >= 75 else "#F8E0A4"
         st.markdown(f"""
-        <div class="kpi-container" style="border-top: 3px solid #38BDF8;">
+        <div class="kpi-container" style="border-top: 3.5px solid #31AAA9;">
             <div class="kpi-label">Institutional Fit Score</div>
-            <div class="kpi-value" style="color: #38BDF8;">{fit_val:.0f}%</div>
+            <div class="kpi-value" style="color: #31AAA9;">{fit_val:.0f}%</div>
             <div class="kpi-subtext" style="color: {delta_color};">{delta_label}</div>
         </div>
         """, unsafe_allow_html=True)
@@ -734,29 +793,29 @@ if active_record and not st.session_state.show_uploader:
         top_traj = data.get("career_trajectories", [{}])[0]
         traj_prob = safe_score(top_traj.get('match_probability', 85))
         st.markdown(f"""
-        <div class="kpi-container" style="border-top: 3px solid #34D399;">
+        <div class="kpi-container" style="border-top: 3.5px solid #F8E0A4;">
             <div class="kpi-label">Primary Role Alignment</div>
-            <div class="kpi-value" style="color: #34D399;">{traj_prob:.0f}%</div>
-            <div class="kpi-subtext" style="color: #94A3B8;">{top_traj.get('role', 'Standard Specialist')[:20]}</div>
+            <div class="kpi-value" style="color: #F8E0A4;">{traj_prob:.0f}%</div>
+            <div class="kpi-subtext" style="color: #D1C7BD;">{top_traj.get('role', 'Standard Specialist')[:20]}</div>
         </div>
         """, unsafe_allow_html=True)
         
     with m3:
         core_skills_count = len(data.get("core_skills", []))
         st.markdown(f"""
-        <div class="kpi-container" style="border-top: 3px solid #FBBF24;">
+        <div class="kpi-container" style="border-top: 3.5px solid #A82020;">
             <div class="kpi-label">Verified Competencies</div>
-            <div class="kpi-value" style="color: #FBBF24;">{core_skills_count}</div>
-            <div class="kpi-subtext" style="color: #94A3B8;">NSQF Framework Aligned</div>
+            <div class="kpi-value" style="color: #F8E0A4;">{core_skills_count}</div>
+            <div class="kpi-subtext" style="color: #31AAA9;">NSQF Framework Aligned</div>
         </div>
         """, unsafe_allow_html=True)
         
     with m4:
         st.markdown(f"""
-        <div class="kpi-container" style="border-top: 3px solid #818CF8;">
+        <div class="kpi-container" style="border-top: 3.5px solid #6C1A1A;">
             <div class="kpi-label">Document Language</div>
-            <div class="kpi-value" style="color: #818CF8; font-size: 1.5rem;">{data.get('primary_language_detected', 'English')}</div>
-            <div class="kpi-subtext" style="color: #94A3B8;">Native AI Translated</div>
+            <div class="kpi-value" style="color: #F8E0A4; font-size: 1.55rem;">{data.get('primary_language_detected', 'English')}</div>
+            <div class="kpi-subtext" style="color: #31AAA9;">Native AI Translated</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -772,7 +831,7 @@ if active_record and not st.session_state.show_uploader:
         """, unsafe_allow_html=True)
         
         st.markdown(f"""
-        <p style="font-size: 1.05rem; line-height: 1.65; color: #E2E8F0; margin-bottom: 1.25rem;">
+        <p style="font-size: 1.05rem; line-height: 1.68; color: #F5F0E8; margin-bottom: 1.25rem;">
             {data.get('executive_summary', 'Evaluation complete.')}
         </p>
         """, unsafe_allow_html=True)
@@ -781,10 +840,10 @@ if active_record and not st.session_state.show_uploader:
         lang = data.get("primary_language_detected", "English")
         
         st.markdown(f"""
-        <div style="border-top: 1px solid rgba(148, 163, 184, 0.15); padding-top: 0.85rem;">
-            <span class="badge-cyan">Tier: {tier}</span>
-            <span class="badge-emerald">Language: {lang}</span>
-            <span class="badge-primary">Engine: {active_record.get('model', 'Gemini')}</span>
+        <div style="border-top: 1px solid rgba(248, 224, 164, 0.15); padding-top: 0.85rem;">
+            <span class="badge-teal">Tier: {tier}</span>
+            <span class="badge-gold">Language: {lang}</span>
+            <span class="badge-wine">Engine: {active_record.get('model', 'Gemini')}</span>
         </div>
         </div>
         """, unsafe_allow_html=True)
@@ -796,24 +855,24 @@ if active_record and not st.session_state.show_uploader:
             mode="gauge+number",
             value=fit_val,
             domain={'x': [0, 1], 'y': [0, 1]},
-            number={'font': {'color': '#38BDF8', 'family': 'Plus Jakarta Sans', 'size': 42}, 'suffix': "%"},
+            number={'font': {'color': '#F8E0A4', 'family': 'Plus Jakarta Sans', 'size': 44}, 'suffix': "%"},
             gauge={
-                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "#64748B", 'tickfont': {'color': '#94A3B8', 'size': 11}},
-                'bar': {'color': "#38BDF8", 'thickness': 0.28},
-                'bgcolor': "#0A101D",
+                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "#8F8275", 'tickfont': {'color': '#D1C7BD', 'size': 11}},
+                'bar': {'color': "#31AAA9", 'thickness': 0.28},
+                'bgcolor': "#140F18",
                 'borderwidth': 0,
                 'steps': [
-                    {'range': [0, 50], 'color': 'rgba(244, 63, 94, 0.18)'},
-                    {'range': [50, 75], 'color': 'rgba(245, 158, 11, 0.18)'},
-                    {'range': [75, 100], 'color': 'rgba(16, 185, 129, 0.18)'}
+                    {'range': [0, 50], 'color': 'rgba(168, 32, 32, 0.28)'},
+                    {'range': [50, 75], 'color': 'rgba(108, 26, 26, 0.38)'},
+                    {'range': [75, 100], 'color': 'rgba(49, 170, 169, 0.25)'}
                 ],
             }
         ))
         fig_gauge.update_layout(
-            paper_bgcolor="#0E1626",
-            plot_bgcolor="#0E1626",
-            font={'color': "#F8FAFC", 'family': "Inter"},
-            height=220,
+            paper_bgcolor="#140F18",
+            plot_bgcolor="#140F18",
+            font={'color': "#F8E0A4", 'family': 'Inter'},
+            height=225,
             margin=dict(l=15, r=15, t=20, b=10)
         )
         st.plotly_chart(fig_gauge, use_container_width=True, config={'displayModeBar': False})
@@ -845,7 +904,7 @@ if active_record and not st.session_state.show_uploader:
                     if strengths:
                         st.markdown("**Key Verified Strengths:**")
                         for s in strengths:
-                            st.markdown(f"• <span style='color: #38BDF8;'>{s}</span>", unsafe_allow_html=True)
+                            st.markdown(f"• <span style='color: #31AAA9;'>{s}</span>", unsafe_allow_html=True)
 
         with c_gaps:
             st.markdown("<div class='inst-card-title'>Target Standard Skill Gaps</div>", unsafe_allow_html=True)
@@ -855,18 +914,18 @@ if active_record and not st.session_state.show_uploader:
             else:
                 for gap in skill_gaps:
                     priority = gap.get("priority", "Medium")
-                    badge_class = "badge-rose" if priority == "High" else ("badge-amber" if priority == "Medium" else "badge-emerald")
-                    border_color = '#FB7185' if priority == 'High' else ('#FBBF24' if priority == 'Medium' else '#34D399')
-                    bg_color = 'rgba(244, 63, 94, 0.08)' if priority == 'High' else ('rgba(245, 158, 11, 0.08)' if priority == 'Medium' else 'rgba(16, 185, 129, 0.08)')
+                    badge_class = "badge-crimson" if priority == "High" else ("badge-gold" if priority == "Medium" else "badge-teal")
+                    border_color = '#A82020' if priority == 'High' else ('#F8E0A4' if priority == 'Medium' else '#31AAA9')
+                    bg_color = 'rgba(168, 32, 32, 0.12)' if priority == 'High' else ('rgba(248, 224, 164, 0.08)' if priority == 'Medium' else 'rgba(49, 170, 169, 0.08)')
                     
                     st.markdown(f"""
-                    <div style="background-color: {bg_color}; border: 1px solid rgba(148, 163, 184, 0.14); border-left: 4px solid {border_color}; border-radius: 6px; padding: 14px 16px; margin-bottom: 12px;">
+                    <div style="background-color: {bg_color}; border: 1px solid rgba(248, 224, 164, 0.16); border-left: 4px solid {border_color}; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; transition: transform 0.2s ease;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <span style="font-weight: 700; font-size: 1rem; color: #F8FAFC;">{gap.get('skill', 'Identified Gap')}</span>
+                            <span style="font-weight: 700; font-size: 1rem; color: #F5F0E8;">{gap.get('skill', 'Identified Gap')}</span>
                             <span class="{badge_class}">{priority} Priority</span>
                         </div>
-                        <div style="font-size: 0.85rem; color: #38BDF8; margin-bottom: 6px;"><b>Target Standard:</b> {gap.get('target_standard', 'Industry Benchmark')}</div>
-                        <p style="margin: 0; font-size: 0.885rem; color: #CBD5E1; line-height: 1.45;">{gap.get('rationale', '')}</p>
+                        <div style="font-size: 0.85rem; color: #31AAA9; margin-bottom: 6px;"><b>Target Standard:</b> {gap.get('target_standard', 'Industry Benchmark')}</div>
+                        <p style="margin: 0; font-size: 0.885rem; color: #D1C7BD; line-height: 1.45;">{gap.get('rationale', '')}</p>
                     </div>
                     """, unsafe_allow_html=True)
 
@@ -884,21 +943,21 @@ if active_record and not st.session_state.show_uploader:
                         r=df_radar['value'],
                         theta=df_radar['axis'],
                         fill='toself',
-                        fillcolor='rgba(14, 165, 233, 0.22)',
-                        line=dict(color='#38BDF8', width=2.5),
-                        marker=dict(color='#BAE6FD', size=7)
+                        fillcolor='rgba(49, 170, 169, 0.25)',
+                        line=dict(color='#31AAA9', width=2.5),
+                        marker=dict(color='#F8E0A4', size=8)
                     ))
                     fig_radar.update_layout(
                         polar=dict(
-                            bgcolor='#0E1626',
-                            radialaxis=dict(visible=True, range=[0, 100], color="#64748B", gridcolor="rgba(148, 163, 184, 0.16)", showticklabels=False),
-                            angularaxis=dict(color="#E2E8F0", gridcolor="rgba(148, 163, 184, 0.16)", tickfont=dict(size=11, family='Inter'))
+                            bgcolor='#140F18',
+                            radialaxis=dict(visible=True, range=[0, 100], color="#8F8275", gridcolor="rgba(248, 224, 164, 0.14)", showticklabels=False),
+                            angularaxis=dict(color="#F8E0A4", gridcolor="rgba(248, 224, 164, 0.14)", tickfont=dict(size=11, family='Inter'))
                         ),
                         showlegend=False,
-                        paper_bgcolor='#0E1626',
-                        plot_bgcolor='#0E1626',
+                        paper_bgcolor='#140F18',
+                        plot_bgcolor='#140F18',
                         margin=dict(l=40, r=40, t=30, b=30),
-                        height=360
+                        height=365
                     )
                     st.plotly_chart(fig_radar, use_container_width=True, config={'displayModeBar': False})
             else:
@@ -913,25 +972,26 @@ if active_record and not st.session_state.show_uploader:
                     df_skills['score'] = df_skills['score'].apply(safe_score)
                     df_skills = df_skills.sort_values(by='score', ascending=True)
                     
+                    # Gradient from Deep Wine to Teal to Champagne
                     fig_bar = px.bar(
                         df_skills,
                         x='score',
                         y='name',
                         orientation='h',
                         color='score',
-                        color_continuous_scale=[[0, '#0284C7'], [0.5, '#2563EB'], [1, '#38BDF8']]
+                        color_continuous_scale=[[0, '#6C1A1A'], [0.45, '#31AAA9'], [1, '#F8E0A4']]
                     )
                     fig_bar.update_layout(
-                        paper_bgcolor='#0E1626',
-                        plot_bgcolor='#0E1626',
-                        xaxis=dict(range=[0, 100], showline=False, showgrid=True, gridcolor='rgba(148, 163, 184, 0.12)', title='Proficiency %', tickfont=dict(color='#94A3B8', size=11)),
-                        yaxis=dict(title='', tickfont=dict(color='#F1F5F9', size=12, family='Inter')),
+                        paper_bgcolor='#140F18',
+                        plot_bgcolor='#140F18',
+                        xaxis=dict(range=[0, 100], showline=False, showgrid=True, gridcolor='rgba(248, 224, 164, 0.12)', title='Proficiency %', tickfont=dict(color='#D1C7BD', size=11)),
+                        yaxis=dict(title='', tickfont=dict(color='#F5F0E8', size=12, family='Inter')),
                         showlegend=False,
                         coloraxis_showscale=False,
                         margin=dict(l=0, r=15, t=20, b=20),
-                        height=360
+                        height=365
                     )
-                    fig_bar.update_traces(marker_line_width=0, opacity=0.92)
+                    fig_bar.update_traces(marker_line_width=0, opacity=0.95)
                     st.plotly_chart(fig_bar, use_container_width=True, config={'displayModeBar': False})
             else:
                 st.info("No skill proficiency metrics recorded.")
@@ -940,35 +1000,38 @@ if active_record and not st.session_state.show_uploader:
         st.markdown("<div class='inst-card-title'>4-Week Structured Competency Acquisition Roadmap</div>", unsafe_allow_html=True)
         roadmap = data.get("strategic_roadmap", [])
         if roadmap:
-            phase_colors = ["#38BDF8", "#34D399", "#FBBF24", "#818CF8"]
+            phase_colors = ["#31AAA9", "#F8E0A4", "#A82020", "#6C1A1A"]
+            phase_text_colors = ["#31AAA9", "#F8E0A4", "#FCA5A5", "#F8E0A4"]
             col_steps = st.columns(len(roadmap)) if len(roadmap) <= 4 else [st.container()]
             if len(roadmap) <= 4:
                 for idx, step in enumerate(roadmap):
                     p_color = phase_colors[idx % len(phase_colors)]
+                    p_text = phase_text_colors[idx % len(phase_text_colors)]
                     with col_steps[idx]:
                         st.markdown(f"""
-                        <div class="inst-card" style="height: 100%; border-top: 3px solid {p_color};">
-                            <div style="font-size: 0.75rem; font-weight: 700; color: {p_color}; text-transform: uppercase;">{step.get('week_range', f'Phase {idx+1}')}</div>
-                            <div style="font-weight: 700; font-size: 1.05rem; color: #F8FAFC; margin: 4px 0 8px 0;">{step.get('phase_title', 'Initiative')}</div>
-                            <div style="font-size: 0.85rem; color: #94A3B8; margin-bottom: 8px;"><b>Focus:</b> {step.get('focus', 'Standard')}</div>
-                            <div style="border-top: 1px solid rgba(148, 163, 184, 0.14); padding-top: 8px; margin-top: 8px;">
-                                <span style="font-size: 0.75rem; color: #34D399; font-weight: 700;">Target Standard:</span>
-                                <div style="font-size: 0.825rem; color: #CBD5E1; margin-top: 2px;">{step.get('target_standard', 'NSQF Alignment')}</div>
+                        <div class="inst-card" style="height: 100%; border-top: 3.5px solid {p_color};">
+                            <div style="font-size: 0.775rem; font-weight: 700; color: {p_text}; text-transform: uppercase;">{step.get('week_range', f'Phase {idx+1}')}</div>
+                            <div style="font-weight: 700; font-size: 1.05rem; color: #F5F0E8; margin: 5px 0 8px 0;">{step.get('phase_title', 'Initiative')}</div>
+                            <div style="font-size: 0.85rem; color: #D1C7BD; margin-bottom: 8px;"><b>Focus:</b> {step.get('focus', 'Standard')}</div>
+                            <div style="border-top: 1px solid rgba(248, 224, 164, 0.15); padding-top: 8px; margin-top: 8px;">
+                                <span style="font-size: 0.75rem; color: #31AAA9; font-weight: 700;">Target Standard:</span>
+                                <div style="font-size: 0.825rem; color: #E8DFD5; margin-top: 2px;">{step.get('target_standard', 'NSQF Alignment')}</div>
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
                         action_items = step.get("action_items", [])
                         if action_items:
                             for item in action_items:
-                                st.markdown(f"<span style='color: {p_color};'>✓</span> <span style='font-size: 0.85rem; color: #CBD5E1;'>{item}</span>", unsafe_allow_html=True)
+                                st.markdown(f"<span style='color: {p_color};'>✓</span> <span style='font-size: 0.85rem; color: #D1C7BD;'>{item}</span>", unsafe_allow_html=True)
             else:
                 for idx, step in enumerate(roadmap):
                     p_color = phase_colors[idx % len(phase_colors)]
+                    p_text = phase_text_colors[idx % len(phase_text_colors)]
                     st.markdown(f"""
                     <div class="inst-card" style="border-left: 4px solid {p_color};">
-                        <div style="font-size: 0.75rem; font-weight: 700; color: {p_color}; text-transform: uppercase;">{step.get('week_range', f'Phase {idx+1}')} — {step.get('phase_title', '')}</div>
-                        <p style="font-size: 0.925rem; color: #CBD5E1; margin: 4px 0;"><b>Focus Area:</b> {step.get('focus', '')}</p>
-                        <p style="font-size: 0.85rem; color: #94A3B8; margin: 0;"><b>Target Standard:</b> <span style="color: #38BDF8;">{step.get('target_standard', '')}</span></p>
+                        <div style="font-size: 0.775rem; font-weight: 700; color: {p_text}; text-transform: uppercase;">{step.get('week_range', f'Phase {idx+1}')} — {step.get('phase_title', '')}</div>
+                        <p style="font-size: 0.925rem; color: #E8DFD5; margin: 4px 0;"><b>Focus Area:</b> {step.get('focus', '')}</p>
+                        <p style="font-size: 0.85rem; color: #D1C7BD; margin: 0;"><b>Target Standard:</b> <span style="color: #31AAA9;">{step.get('target_standard', '')}</span></p>
                     </div>
                     """, unsafe_allow_html=True)
         else:
