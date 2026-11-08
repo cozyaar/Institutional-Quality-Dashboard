@@ -4,6 +4,7 @@ import json
 import os
 import re
 import time
+import io
 from datetime import datetime
 from PIL import Image
 import plotly.graph_objects as go
@@ -232,7 +233,6 @@ if "show_uploader" not in st.session_state:
     st.session_state.show_uploader = True
 
 # --- API KEY RESOLUTION ---
-# Checks st.secrets safely and environment variables without breaking
 def get_gemini_api_key():
     key = None
     try:
@@ -274,14 +274,14 @@ def clean_json_response(raw_text):
             return json.loads(match.group(0))
         raise
 
-def extract_pdf_text(uploaded_file):
-    """Safely extracts text using PyPDF2 with fallbacks."""
+def extract_pdf_text(file_bytes):
+    """Safely extracts text using PyPDF2 or pypdf with BytesIO stream."""
     if not PDF_READER_AVAILABLE:
         return ""
     try:
-        pdf_reader = PyPDF2.PdfReader(uploaded_file)
+        reader = PyPDF2.PdfReader(io.BytesIO(file_bytes))
         text = ""
-        for page in pdf_reader.pages:
+        for page in reader.pages:
             t = page.extract_text()
             if t:
                 text += t + "\n"
@@ -289,26 +289,99 @@ def extract_pdf_text(uploaded_file):
     except Exception:
         return ""
 
-def call_gemini_audit(contents, api_key_to_use):
-    """Executes generative analysis with automatic model fallback."""
-    candidate_models = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"]
+def get_supported_models(api_key_to_use):
+    """Dynamically queries Google API for models that support generateContent."""
+    discovered = []
+    try:
+        genai.configure(api_key=api_key_to_use)
+        for m in genai.list_models():
+            methods = getattr(m, 'supported_generation_methods', [])
+            if 'generateContent' in methods:
+                clean = m.name.replace("models/", "")
+                discovered.append(clean)
+    except Exception:
+        pass
+        
+    preferred_order = [
+        "gemini-2.5-flash",
+        "gemini-2.0-flash",
+        "gemini-2.5-pro",
+        "gemini-2.0-flash-lite",
+        "gemini-2.0-flash-exp",
+        "gemini-1.5-flash",
+        "gemini-1.5-pro",
+        "gemini-pro"
+    ]
+    
+    candidates = []
+    # 1. Match discovered against preferred order
+    for pref in preferred_order:
+        for disc in discovered:
+            if disc == pref or disc.startswith(pref):
+                if disc not in candidates:
+                    candidates.append(disc)
+                    
+    # 2. Add any remaining discovered gemini models
+    for disc in discovered:
+        if disc not in candidates and "gemini" in disc.lower():
+            candidates.append(disc)
+            
+    # 3. Fallback if discovery returned nothing (e.g. list_models permission restriction)
+    for pref in preferred_order:
+        if pref not in candidates:
+            candidates.append(pref)
+            
+    return candidates
+
+def call_gemini_audit(contents, api_key_to_use, extracted_text="", system_prompt=""):
+    """Executes generative analysis with automatic model discovery and multi-payload fallback."""
+    candidate_models = get_supported_models(api_key_to_use)
     genai.configure(api_key=api_key_to_use)
     
-    last_error = None
+    errors = []
+    text_fallback_payload = (
+        [f"{system_prompt}\n\n=== CANDIDATE RESUME DOCUMENT TEXT ===\n{extracted_text}"]
+        if (extracted_text and len(extracted_text.strip()) > 30)
+        else None
+    )
+    
+    payloads_to_try = [contents]
+    if text_fallback_payload and text_fallback_payload != contents:
+        payloads_to_try.append(text_fallback_payload)
+        
     for model_name in candidate_models:
-        try:
-            model = genai.GenerativeModel(
-                model_name=model_name,
-                generation_config={"response_mime_type": "application/json", "temperature": 0.2}
-            )
-            response = model.generate_content(contents)
-            parsed = clean_json_response(response.text)
-            return parsed, model_name
-        except Exception as e:
-            last_error = e
-            continue
+        for current_payload in payloads_to_try:
+            try:
+                model = genai.GenerativeModel(
+                    model_name=model_name,
+                    generation_config={"response_mime_type": "application/json", "temperature": 0.2}
+                )
+                response = model.generate_content(current_payload)
+                parsed = clean_json_response(response.text)
+                return parsed, model_name
+            except Exception as e:
+                err_str = str(e)
+                # If JSON mode is rejected or unsupported, try plain generation
+                if "response_mime_type" in err_str.lower() or "schema" in err_str.lower() or "not supported" in err_str.lower():
+                    try:
+                        model_plain = genai.GenerativeModel(
+                            model_name=model_name,
+                            generation_config={"temperature": 0.2}
+                        )
+                        response = model_plain.generate_content(current_payload)
+                        parsed = clean_json_response(response.text)
+                        return parsed, model_name
+                    except Exception as inner_e:
+                        errors.append(f"{model_name}: {inner_e}")
+                else:
+                    errors.append(f"{model_name}: {err_str}")
+                
+                # If model is not found (404), skip secondary payload for this model
+                if "404" in err_str or "not found" in err_str.lower():
+                    break
             
-    raise RuntimeError(f"All model endpoints failed. Last error: {last_error}")
+    error_summary = "\n• " + "\n• ".join(errors[:4])
+    raise RuntimeError(f"All model endpoints failed:{error_summary}")
 
 # --- SIDEBAR: INSTITUTIONAL SYSTEM & IN-MEMORY ARCHIVE ---
 with st.sidebar:
@@ -433,21 +506,25 @@ if st.session_state.show_uploader or not active_record:
                 with st.status("Performing Institutional Verification...", expanded=True) as status:
                     st.write("Extracting structural features from document payload...")
                     
-                    contents = []
+                    file_bytes = uploaded_file.getvalue()
                     extracted_text = ""
+                    contents = []
                     
                     try:
                         if uploaded_file.name.lower().endswith(".pdf"):
-                            pdf_bytes = uploaded_file.getvalue()
-                            # Extract native text if available
-                            extracted_text = extract_pdf_text(uploaded_file)
-                            # Pass inline PDF bytes for native multimodal understanding
-                            contents.append({
-                                "mime_type": "application/pdf",
-                                "data": pdf_bytes
-                            })
+                            extracted_text = extract_pdf_text(file_bytes)
+                            # Format primary payload
+                            if extracted_text and len(extracted_text.strip()) > 40:
+                                contents = [
+                                    {"mime_type": "application/pdf", "data": file_bytes},
+                                    f"--- Extracted Document Text ---\n{extracted_text[:14000]}"
+                                ]
+                            else:
+                                contents = [
+                                    {"mime_type": "application/pdf", "data": file_bytes}
+                                ]
                         else:
-                            contents.append(Image.open(uploaded_file))
+                            contents = [Image.open(io.BytesIO(file_bytes))]
                     except Exception as e:
                         status.update(label=f"Document ingestion failed: {e}", state="error")
                         st.stop()
@@ -530,13 +607,15 @@ if st.session_state.show_uploader or not active_record:
                     }}
                     """
 
-                    if extracted_text and len(extracted_text) > 100:
-                        contents.append(f"\n--- Extracted Resume Document Text ---\n{extracted_text[:12000]}")
-                        
                     contents.insert(0, system_prompt)
 
                     try:
-                        parsed_data, used_model = call_gemini_audit(contents, api_key)
+                        parsed_data, used_model = call_gemini_audit(
+                            contents=contents,
+                            api_key_to_use=api_key,
+                            extracted_text=extracted_text,
+                            system_prompt=system_prompt
+                        )
                         
                         # Data sanitization
                         global_score = safe_score(parsed_data.get("global_confidence_score", 80))
